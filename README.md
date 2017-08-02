@@ -151,7 +151,7 @@ b.toString = () => b.class
 
 ## Short property names
 
-Short property names can also be used and are the acronyms of full css properties with collisions [handpicked by popularity](https://github.com/porsager/bss/lib/popular.js)
+Short property names can also be used and are the acronyms of full css properties with collisions [handpicked by popularity](lib/popular.js)
 
 ``` js
 b.bc('black')
