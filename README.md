@@ -171,7 +171,7 @@ b.f1.p1 // { font-size: '3rem'; padding: '0.25rem'; }
 
 // Created like this:
 b.helper('f1', b.fontSize('3rem'))
-b.helper('pa1', b.padding('0.25rem'))
+b.helper('p1', b.padding('0.25rem'))
 ```
 
 Helpers can also take values like this:
