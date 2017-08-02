@@ -1,6 +1,6 @@
 {
   "name": "bss",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Better Style Sheets",
   "main": "lib/index.js",
   "browser": "bss.js",
