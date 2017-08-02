@@ -65,7 +65,7 @@ Creates the following in the dom.
 </style>
 
 <body>
-  <h1 class="bdp4f3o1" style="background:red;">Hello world</h1>
+  <h1 class="bdp4f3o1" style="background:green;">Hello world</h1>
 </body>
 ```
 
