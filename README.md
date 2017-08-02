@@ -53,7 +53,7 @@ m.mount(document.body, {
 })
 ```
 
-Creates the following in the dom.
+Creates the following in the dom, which toggles the style attribute on click.
 ``` html
 
 <style>
