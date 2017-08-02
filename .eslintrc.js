@@ -48,7 +48,9 @@ module.exports = {
     'curly': [2, 'multi-or-nest', 'consistent'],
     'default-case': 2,
     'dot-location': [2, 'property'],
-    'dot-notation': [2, { 'allowPattern': '^[a-z]+(_[a-z]+)+$' }],
+    'dot-notation': [2, {
+      'allowPattern': '^[a-z]+(_[a-z]+)+$'
+    }],
     'eqeqeq': 2,
     'no-alert': 2,
     'no-caller': 2,
@@ -73,7 +75,14 @@ module.exports = {
     'no-lone-blocks': 2,
     'no-loop-func': 2,
     'no-magic-numbers': 0,
-    'no-multi-spaces': [2, { exceptions : { Array: true, Property: true, VariableDeclarator: true, ImportDeclaration: true }}],
+    'no-multi-spaces': [2, {
+      exceptions: {
+        Array: true,
+        Property: true,
+        VariableDeclarator: true,
+        ImportDeclaration: true
+      }
+    }],
     'no-multi-str': 2,
     'no-native-reassign': 2,
     'no-new': 2,
@@ -108,8 +117,13 @@ module.exports = {
     'no-shadow-restricted-names': 2,
     'no-undef': 2,
     'no-undef-init': 2,
-    'no-unused-vars': [1, {'vars': 'all', 'args': 'none' }],
-    'no-use-before-define': [2, { "functions": false }],
+    'no-unused-vars': [1, {
+      'vars': 'all',
+      'args': 'none'
+    }],
+    'no-use-before-define': [2, {
+      "functions": false
+    }],
 
     /* Node.js and CommonJS */
     'callback-return': 0,
@@ -124,21 +138,38 @@ module.exports = {
     /* Stylistic issues */
     'array-bracket-spacing': [2, 'never'],
     'block-spacing': [2, 'always'],
-    'brace-style': [2, '1tbs', { "allowSingleLine": true }],
+    'brace-style': [2, '1tbs', {
+      "allowSingleLine": true
+    }],
     'camelcase': 2,
     'comma-spacing': 2,
-    'comma-style': [2, 'first', { exceptions: { ArrayExpression: true, ObjectExpression: true }}],
+    'comma-style': [2, 'first', {
+      exceptions: {
+        ArrayExpression: true,
+        ObjectExpression: true
+      }
+    }],
     'consistent-this': [2, 'self'],
     'eol-last': 2,
     'indent': [2, 2, {
-        MemberExpression: 1,
-        VariableDeclarator: { const: 2 },
-        FunctionExpression: { parameters: 'off' },
-        CallExpression: 'off',
-        ArrayExpression: 'first',
-        ObjectExpression: 'first'
+      MemberExpression: 'off',
+      VariableDeclarator: {
+        const: 2
+      },
+      FunctionExpression: {
+        parameters: 'first'
+      },
+      CallExpression: {
+        arguments: 'off'
+      },
+      ArrayExpression: 'first',
+      ObjectExpression: 'first'
     }],
-    'key-spacing': [0, { beforeColon: false, afterColon: true, mode: 'minimum' }],
+    'key-spacing': [0, {
+      beforeColon: false,
+      afterColon: true,
+      mode: 'minimum'
+    }],
     'keyword-spacing': 2,
     'linebreak-style': 2,
     'lines-around-comment': 2,
@@ -147,7 +178,9 @@ module.exports = {
     'max-nested-callbacks': [2, 5],
     'max-params': [2, 4],
     'max-statements-per-line': 2,
-    'new-cap': [2, { capIsNew: false }],
+    'new-cap': [2, {
+      capIsNew: false
+    }],
     'new-parens': 2,
     'newline-after-var': 0,
     'newline-before-return': 0,
