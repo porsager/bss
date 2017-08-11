@@ -54,4 +54,10 @@ o.spec('helpers', function() {
     b.helper('foo', arg => b`foo ${arg}`)
     o(b.foo('bar').style).deepEquals({foo: 'bar'})
   })
+
+  o('with and without args mixed', function() {
+    b.helper('foo', arg => b`foo ${arg}`)
+    b.helper('baz', b`baz foz`)
+    o(b.foo('bar').baz.style).deepEquals({foo: 'bar', baz: 'foz'})
+  })
 })
