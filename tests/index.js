@@ -24,46 +24,58 @@ global.window = {
 const b = require('../lib').default
 const sheet = require('../lib/sheet')
 
-o('inputs', function() {
-  o(b`foo: bar;`.style).deepEquals({foo: 'bar'})
-  o(b`foo: bar`.style).deepEquals({foo: 'bar'})
-  o(b`foo bar`.style).deepEquals({foo: 'bar'})
-  o(b({foo: 'bar'}).style).deepEquals({foo: 'bar'})
-})
+o.spec('bss', function() {
+  o.afterEach(sheet._reset)
 
-o('default css properties', function() {
-  o(b.bc('green').style).deepEquals({backgroundColor: 'green'})
-  o(b.backgroundColor('red').style).deepEquals({backgroundColor: 'red'})
-})
-
-o('css class generation', function(done) {
-  const cls = b`foo: bar;`.class
-  setTimeout(() => {
-    o(cls).equals(sheet.classPrefix + 1)
-    o(styleEl.textContent).equals(`.${cls}{foo:bar;}`)
-    done()
-  })
-})
-
-o.spec('helpers', function() {
-  o('without args', function() {
-    b.helper('foobar', b`foo bar`)
-    o(b.foobar.style).deepEquals({foo: 'bar'})
+  o('inputs', function() {
+    o(b`foo: bar;`.style).deepEquals({foo: 'bar'})
+    o(b`foo: bar`.style).deepEquals({foo: 'bar'})
+    o(b`foo: bar`.style).deepEquals({foo: 'bar'})
+    o(b({foo: 'bar'}).style).deepEquals({foo: 'bar'})
   })
 
-  o('with args (object notation)', function() {
-    b.helper('foo', arg => b({foo: arg}))
-    o(b.foo('bar').style).deepEquals({foo: 'bar'})
+  o('default css properties', function() {
+    o(b.bc('green').style).deepEquals({backgroundColor: 'green'})
+    o(b.backgroundColor('red').style).deepEquals({backgroundColor: 'red'})
   })
 
-  o('with args (bss notation)', function() {
-    b.helper('foo', arg => b`foo ${arg}`)
-    o(b.foo('bar').style).deepEquals({foo: 'bar'})
+  o('pseudo', function(done) {
+    const cls = b.$hover(b.bc('green')).class
+    setTimeout(() => {
+      o(styleEl.textContent).equals(`.${cls}:hover{background-color:green;}`)
+      done()
+    })
   })
 
-  o('with and without args mixed', function() {
-    b.helper('foo', arg => b`foo ${arg}`)
-    b.helper('baz', b`baz foz`)
-    o(b.foo('bar').baz.style).deepEquals({foo: 'bar', baz: 'foz'})
+  o('css class generation', function(done) {
+    const cls = b`foo: bar;`.class
+    setTimeout(() => {
+      o(cls).equals(sheet.classPrefix + 1)
+      o(styleEl.textContent).equals(`.${cls}{foo:bar;}`)
+      done()
+    })
+  })
+
+  o.spec('helpers', function() {
+    o('without args', function() {
+      b.helper('foobar', b`foo bar`)
+      o(b.foobar.style).deepEquals({foo: 'bar'})
+    })
+
+    o('with args (object notation)', function() {
+      b.helper('foo', arg => b({foo: arg}))
+      o(b.foo('bar').style).deepEquals({foo: 'bar'})
+    })
+
+    o('with args (bss notation)', function() {
+      b.helper('foo', arg => b`foo ${arg}`)
+      o(b.foo('bar').style).deepEquals({foo: 'bar'})
+    })
+
+    o('with and without args mixed', function() {
+      b.helper('foo', arg => b`foo ${arg}`)
+      b.helper('baz', b`baz foz`)
+      o(b.foo('bar').baz.style).deepEquals({foo: 'bar', baz: 'foz'})
+    })
   })
 })
