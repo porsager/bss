@@ -43,19 +43,17 @@ o('css class generation', async function(done) {
 
 o.spec('helpers', function() {
   o('without args', function() {
-    b.helper('foobar', b`foo bar`.style)
+    b.helper('foobar', b`foo bar`)
     o(b.foobar.style).deepEquals({foo: 'bar'})
   })
 
   o('with args (object notation)', function() {
-    b.helper('foo', arg => ({foo: arg}))
+    b.helper('foo', arg => b({foo: arg}))
     o(b.foo('bar').style).deepEquals({foo: 'bar'})
   })
 
-  // todo make this work
   o('with args (bss notation)', function() {
-    return
-    b.helper('foo', arg => b`foo: ${arg}`.style)
+    b.helper('foo', arg => b`foo ${arg}`)
     o(b.foo('bar').style).deepEquals({foo: 'bar'})
   })
 })
