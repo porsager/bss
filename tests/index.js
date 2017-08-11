@@ -25,6 +25,7 @@ const sheet = require('../lib/sheet')
 
 o('inputs', function() {
   o(b`foo: bar;`.style).deepEquals({foo: 'bar'})
+  o(b`foo: bar`.style).deepEquals({foo: 'bar'})
   o(b`foo bar`.style).deepEquals({foo: 'bar'})
   o(b({foo: 'bar'}).style).deepEquals({foo: 'bar'})
 })
