@@ -9,6 +9,7 @@ global.document = {
   },
   documentElement: {
     style: {
+      backgroundColor: '',
       width: 0
     }
   }
@@ -28,6 +29,11 @@ o('inputs', function() {
   o(b`foo: bar`.style).deepEquals({foo: 'bar'})
   o(b`foo bar`.style).deepEquals({foo: 'bar'})
   o(b({foo: 'bar'}).style).deepEquals({foo: 'bar'})
+})
+
+o('default css properties', function() {
+  o(b.bc('green').style).deepEquals({backgroundColor: 'green'})
+  o(b.backgroundColor('red').style).deepEquals({backgroundColor: 'red'})
 })
 
 o('css class generation', function(done) {
