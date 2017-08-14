@@ -1,7 +1,14 @@
 require('reify')
 const o = require('ospec')
 
-const styleEl = {}
+const styleEl = {
+  style: {
+    setProperty: (prop) => {
+      if (prop === 'backgroundColor')
+        throw new Error()
+    }
+  }
+}
 global.document = {
   createElement: () => styleEl,
   head: {
@@ -10,7 +17,7 @@ global.document = {
   documentElement: {
     style: {
       backgroundColor: '',
-      width: 0
+      width: '0'
     }
   }
 }
@@ -28,15 +35,16 @@ o.spec('bss', function() {
   o.afterEach(sheet._reset)
 
   o('inputs', function() {
-    o(b`foo: bar;`.style).deepEquals({foo: 'bar'})
-    o(b`foo: bar`.style).deepEquals({foo: 'bar'})
-    o(b`foo: bar`.style).deepEquals({foo: 'bar'})
-    o(b({foo: 'bar'}).style).deepEquals({foo: 'bar'})
+    o(b`foo: bar;`.style).deepEquals({ foo: 'bar' })
+    o(b`foo: bar`.style).deepEquals({ foo: 'bar' })
+    o(b`foo: bar`.style).deepEquals({ foo: 'bar' })
+    o(b({ foo: 'bar' }).style).deepEquals({ foo: 'bar' })
+    o(b('foo', 'bar').style).deepEquals({ foo: 'bar' })
   })
 
   o('default css properties', function() {
-    o(b.bc('green').style).deepEquals({backgroundColor: 'green'})
-    o(b.backgroundColor('red').style).deepEquals({backgroundColor: 'red'})
+    o(b.bc('green').style).deepEquals({ backgroundColor: 'green' })
+    o(b.backgroundColor('red').style).deepEquals({ backgroundColor: 'red' })
   })
 
   o('pseudo', function(done) {
@@ -56,26 +64,40 @@ o.spec('bss', function() {
     })
   })
 
+  o('add px', function() {
+    o(b`w 1`.style).deepEquals({ width: '1px' })
+    o(b('width 1').style).deepEquals({ width: '1px' })
+    o(b.w(1).style).deepEquals({ width: '1px' })
+  })
+
+  o('clears empty', function() {
+    o(b.width(false && 20).style).deepEquals({})
+    o(b.width(undefined && 20).style).deepEquals({})
+    o(b.width(null && 20).style).deepEquals({})
+    o(b.width('').style).deepEquals({})
+  })
+
   o.spec('helpers', function() {
+
     o('without args', function() {
       b.helper('foobar', b`foo bar`)
-      o(b.foobar.style).deepEquals({foo: 'bar'})
+      o(b.foobar.style).deepEquals({ foo: 'bar' })
     })
 
     o('with args (object notation)', function() {
-      b.helper('foo', arg => b({foo: arg}))
-      o(b.foo('bar').style).deepEquals({foo: 'bar'})
+      b.helper('foo', arg => b({ foo: arg }))
+      o(b.foo('bar').style).deepEquals({ foo: 'bar' })
     })
 
     o('with args (bss notation)', function() {
       b.helper('foo', arg => b`foo ${arg}`)
-      o(b.foo('bar').style).deepEquals({foo: 'bar'})
+      o(b.foo('bar').style).deepEquals({ foo: 'bar' })
     })
 
     o('with and without args mixed', function() {
       b.helper('foo', arg => b`foo ${arg}`)
       b.helper('baz', b`baz foz`)
-      o(b.foo('bar').baz.style).deepEquals({foo: 'bar', baz: 'foz'})
+      o(b.foo('bar').baz.style).deepEquals({ foo: 'bar', baz: 'foz' })
     })
   })
 })
