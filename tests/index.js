@@ -28,15 +28,15 @@ o.spec('bss', function() {
   o.afterEach(sheet._reset)
 
   o('inputs', function() {
-    o(b`foo: bar;`.style).deepEquals({foo: 'bar'})
-    o(b`foo: bar`.style).deepEquals({foo: 'bar'})
-    o(b`foo: bar`.style).deepEquals({foo: 'bar'})
-    o(b({foo: 'bar'}).style).deepEquals({foo: 'bar'})
+    o(b`foo: bar;`.style).deepEquals({ foo: 'bar' })
+    o(b`foo: bar`.style).deepEquals({ foo: 'bar' })
+    o(b`foo: bar`.style).deepEquals({ foo: 'bar' })
+    o(b({ foo: 'bar' }).style).deepEquals({ foo: 'bar' })
   })
 
   o('default css properties', function() {
-    o(b.bc('green').style).deepEquals({backgroundColor: 'green'})
-    o(b.backgroundColor('red').style).deepEquals({backgroundColor: 'red'})
+    o(b.bc('green').style).deepEquals({ backgroundColor: 'green' })
+    o(b.backgroundColor('red').style).deepEquals({ backgroundColor: 'red' })
   })
 
   o('pseudo', function(done) {
@@ -59,23 +59,23 @@ o.spec('bss', function() {
   o.spec('helpers', function() {
     o('without args', function() {
       b.helper('foobar', b`foo bar`)
-      o(b.foobar.style).deepEquals({foo: 'bar'})
+      o(b.foobar.style).deepEquals({ foo: 'bar' })
     })
 
     o('with args (object notation)', function() {
-      b.helper('foo', arg => b({foo: arg}))
-      o(b.foo('bar').style).deepEquals({foo: 'bar'})
+      b.helper('foo', arg => b({ foo: arg }))
+      o(b.foo('bar').style).deepEquals({ foo: 'bar' })
     })
 
     o('with args (bss notation)', function() {
       b.helper('foo', arg => b`foo ${arg}`)
-      o(b.foo('bar').style).deepEquals({foo: 'bar'})
+      o(b.foo('bar').style).deepEquals({ foo: 'bar' })
     })
 
     o('with and without args mixed', function() {
       b.helper('foo', arg => b`foo ${arg}`)
       b.helper('baz', b`baz foz`)
-      o(b.foo('bar').baz.style).deepEquals({foo: 'bar', baz: 'foz'})
+      o(b.foo('bar').baz.style).deepEquals({ foo: 'bar', baz: 'foz' })
     })
   })
 })
