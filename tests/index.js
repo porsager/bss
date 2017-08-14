@@ -1,7 +1,14 @@
 require('reify')
 const o = require('ospec')
 
-const styleEl = {}
+const styleEl = {
+  style: {
+    setProperty: (prop) => {
+      if (prop === 'backgroundColor')
+        throw new Error()
+    }
+  }
+}
 global.document = {
   createElement: () => styleEl,
   head: {
@@ -10,7 +17,7 @@ global.document = {
   documentElement: {
     style: {
       backgroundColor: '',
-      width: 0
+      width: '0'
     }
   }
 }
@@ -56,7 +63,14 @@ o.spec('bss', function() {
     })
   })
 
+  o('add px', function() {
+    o(b`w 1`.style).deepEquals({ width: '1px' })
+    o(b('width 1').style).deepEquals({ width: '1px' })
+    o(b.w(1).style).deepEquals({ width: '1px' })
+  })
+
   o.spec('helpers', function() {
+
     o('without args', function() {
       b.helper('foobar', b`foo bar`)
       o(b.foobar.style).deepEquals({ foo: 'bar' })
