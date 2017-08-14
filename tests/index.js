@@ -39,6 +39,7 @@ o.spec('bss', function() {
     o(b`foo: bar`.style).deepEquals({ foo: 'bar' })
     o(b`foo: bar`.style).deepEquals({ foo: 'bar' })
     o(b({ foo: 'bar' }).style).deepEquals({ foo: 'bar' })
+    o(b('foo', 'bar').style).deepEquals({ foo: 'bar' })
   })
 
   o('default css properties', function() {
