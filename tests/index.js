@@ -69,6 +69,13 @@ o.spec('bss', function() {
     o(b.w(1).style).deepEquals({ width: '1px' })
   })
 
+  o('clears empty', function() {
+    o(b.width(false && 20).style).deepEquals({})
+    o(b.width(undefined && 20).style).deepEquals({})
+    o(b.width(null && 20).style).deepEquals({})
+    o(b.width('').style).deepEquals({})
+  })
+
   o.spec('helpers', function() {
 
     o('without args', function() {
