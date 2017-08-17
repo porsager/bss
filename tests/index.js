@@ -67,6 +67,7 @@ o.spec('bss', function() {
   o('add px', function() {
     o(b`w 1`.style).deepEquals({ width: '1px' })
     o(b('width 1').style).deepEquals({ width: '1px' })
+    o(b({ width: 1 }).style).deepEquals({ width: '1px' })
     o(b.w(1).style).deepEquals({ width: '1px' })
   })
 
