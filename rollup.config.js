@@ -1,6 +1,4 @@
 import buble from 'rollup-plugin-buble'
-import commonjs from 'rollup-plugin-commonjs'
-import nodeResolve from 'rollup-plugin-node-resolve'
 import uglify from 'rollup-plugin-uglify'
 import filesize from 'rollup-plugin-filesize'
 
@@ -11,11 +9,11 @@ export default {
   moduleName: 'b',
   sourceMap: true,
   exports: 'default',
-  plugins: [
-    commonjs(),
-    nodeResolve(),
-    buble(),
-    uglify({ mangle: true, compress: true }),
-    filesize()
-  ]
+  plugins: process.env.TEST
+    ? []
+    : [
+      buble(),
+      uglify({ mangle: true, compress: true }),
+      filesize()
+    ]
 }

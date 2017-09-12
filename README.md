@@ -172,6 +172,12 @@ b.f1.p1 // { font-size: '3rem'; padding: '0.25rem'; }
 // Created like this:
 b.helper('f1', b.fontSize('3rem'))
 b.helper('p1', b.padding('0.25rem'))
+
+// Or like this:
+b.helper{
+  f1: b.fontSize('3rem'),
+  p1: b.padding('0.25rem')
+})
 ```
 
 Helpers can also take values like this:
@@ -187,6 +193,22 @@ b.helper('size', (width, height) =>
 b.helper('align', (x, y) =>
   b.display('flex').justifyContent(x).alignItems(y || x)
 )
+```
+
+They can even be easy to use media query groupers like this:
+
+```js
+b.desktop(
+  b.fontSize(128)
+)
+
+// Equally valid is 
+b.desktop(`
+  fs 128
+`)
+
+// Created like this:
+b.helper('desktop', style => b.$media('(min-width:801px)', style))
 ```
 
 ## Pixel values and Numbers
@@ -263,21 +285,6 @@ A way to add regular css properties to a selector and prepend to the generated s
 ```
 b.css('html', b.boxSizing('border-box'))
 b.css('*, *:before, *:after', b.boxSizing('inherit'))
-```
-
-## `.prepend`
-
-Prepend raw css strings to the generated stylesheet content
-
-```
-b.prepend(`
-  html {
-    box-sizing: border-box;
-  }
-  *, *:before, *:after {
-    box-sizing: inherit;
-  }
-`)
 ```
 
 ## Browser support
