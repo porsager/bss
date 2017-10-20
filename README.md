@@ -16,7 +16,7 @@ Any group of definitions are resolved once one of the following properties are a
 
 - [`.style` Returns a Javascript style object ](#style)
 - [`.class` Returns a class name](#class)
-- [`.toString() or '' +` returns '.' + b.class](#tostring)
+- [`.valueOf() or '' +` returns '.' + b.class](#tostring)
 
 ## Installation
 
@@ -134,17 +134,17 @@ The `.style` getter also closes the current style description and return a JS ob
 b.textAlign('green').style // Returns { textAlign: 'green' }
 ```
 
-### `toString()`
+### `valueOf()`
 
-`.toString()` will be called if b is used like `'div' + b` because javascript casts automatically using `.toString()`.
+`.valueOf()` will be called if b is used like `'div' + b` because javascript casts automatically using `.valueOf()`.
 Casting `b` to a string will call `.class` and prepend a period for easy use in vdom libraries.
 ``` js
 'div' + b.textAlign('green') // Returns eg. div.bdp4f3o1
 ```
 
-You can also override `.toString` to return the class if needed
+You can also override `.valueOf` if you set classNames instead of selectors
 ``` 
-b.toString = () => b.class
+b.valueOf = function() { return b.class + ' ' }
 
 `<div class="${ b.textAlign('green') }`"></div>` // Returns eg. <div class="bdp4f3o1"></div>
 ```
