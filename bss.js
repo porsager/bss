@@ -172,8 +172,8 @@ function stylesToCss(style) {
 }
 
 function stringToObject(string) {
-  return string.split('\n').reduce((acc, line) => {
-    const tokens = line.replace(';', '').trim().split(/[: ]/);
+  return string.replace(/;/g, '\n').split('\n').reduce((acc, line) => {
+    const tokens = line.trim().split(/[: ]/);
     if (tokens.length > 1) {
       const key = hyphenToCamelCase(tokens.shift().trim());
       acc[shorts[key] || key] = addPx(shorts[key] || key, tokens.join(' ').trim());
