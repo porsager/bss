@@ -3,7 +3,6 @@
   "version": "1.0.1",
   "description": "Better Style Sheets",
   "main": "bss.js",
-  "browser": "bss.js",
   "module": "lib/index.js",
   "scripts": {
     "test": "TEST=true npm run build && ospec",
