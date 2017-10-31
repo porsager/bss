@@ -46,6 +46,7 @@ const b = require('../bss')
 
 o.spec('bss', function() {
   o('inputs', function() {
+    o(b`foo: bar; baz: boo;`.style).deepEquals({ foo: 'bar', baz: 'boo' })
     o(b`foo: bar;`.style).deepEquals({ foo: 'bar' })
     o(b`foo: bar`.style).deepEquals({ foo: 'bar' })
     o(b`foo: bar`.style).deepEquals({ foo: 'bar' })
