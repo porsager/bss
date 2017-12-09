@@ -51,7 +51,7 @@ module.exports = {
     'dot-notation': [2, {
       'allowPattern': '^[a-z]+(_[a-z]+)+$'
     }],
-    'eqeqeq': 2,
+    'eqeqeq': 1,
     'no-alert': 2,
     'no-caller': 2,
     'no-case-declarations': 2,
@@ -59,7 +59,7 @@ module.exports = {
     'no-else-return': 2,
     'no-empty-function': 2,
     'no-empty-pattern': 2,
-    'no-eq-null': 2,
+    'no-eq-null': 1,
     'no-eval': 2,
     'no-extend-native': 2,
     'no-extra-bind': 2,
