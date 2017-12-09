@@ -25,18 +25,11 @@ global.document = {
   createElement: () => styleEl(),
   head: {
     appendChild: () => null
-  },
-  documentElement: {
-    style: {
-      backgroundColor: '',
-      content: '',
-      width: '0',
-      padding: ''
-    }
   }
 }
 
 global.window = {
+  getComputedStyle: () => ({ width: '', backgroundColor: '', padding: '' }),
   navigator: {
     userAgent: 'test'
   }
