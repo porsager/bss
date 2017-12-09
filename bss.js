@@ -19,6 +19,7 @@ var popular = {
   h  : 'height',
   jc : 'justifyContent',
   l  : 'left',
+  ls : 'letterSpacing',
   m  : 'margin',
   mb : 'marginBottom',
   ml : 'marginLeft',
@@ -38,26 +39,24 @@ var popular = {
   w  : 'width'
 };
 
-const shorts = Object.create(null);
+var shorts = Object.create(null);
 
-const cssProperties = Object.keys(
-  findWidth(document.documentElement.style)
-).filter(prop => typeof document.documentElement.style[prop] === 'string');
+var style = window.getComputedStyle(document.documentElement, null);
 
-function findWidth(obj) {
-  return obj.hasOwnProperty('width')
-    ? obj
-    : findWidth(Object.getPrototypeOf(obj))
-}
+var cssProperties = style && typeof style.width === 'string'
+  ? Object.keys(style).filter(function (a) { return a % 1 !== 0; })
+  : Array.prototype.slice.call(style, 0, style.length).map(hyphenToCamelCase);
 
-const vendorMap = Object.create(null, {});
+var vendorMap = Object.create(null, {});
 
-const vendorRegex = /^(o|O|ms|MS|Ms|moz|Moz|webkit|Webkit|WebKit)([A-Z])/;
+var vendorRegex = /^(o|O|ms|MS|Ms|moz|Moz|webkit|Webkit|WebKit)([A-Z])/;
 
 function parse(input, value) {
+  var obj;
+
   if (typeof input === 'string') {
     if (typeof value === 'string' || typeof value === 'number')
-      return ({ [input] : value })
+      { return (( obj = {}, obj[input] = value, obj)) }
 
     return stringToObject(input)
   } else if (Array.isArray(input) && Array.isArray(input.raw)) {
@@ -68,13 +67,16 @@ function parse(input, value) {
   return input.style || sanitize(input)
 }
 
-const memoize = (fn, cache = {}) => item =>
-  item in cache
-    ? cache[item]
-    : cache[item] = fn(item);
+var memoize = function (fn, cache) {
+  if ( cache === void 0 ) cache = {};
 
-const appendPx = memoize(prop => {
-  const el = document.createElement('div');
+  return function (item) { return item in cache
+    ? cache[item]
+    : cache[item] = fn(item); };
+};
+
+var appendPx = memoize(function (prop) {
+  var el = document.createElement('div');
 
   try {
     el.style[prop] = '1px';
@@ -92,25 +94,25 @@ function lowercaseFirst(string) {
 }
 
 function sanitize(styles) {
-  return Object.keys(styles).reduce((acc, key) => {
-    const value = styles[key];
+  return Object.keys(styles).reduce(function (acc, key) {
+    var value = styles[key];
 
     if (!value && value !== 0 && value !== '')
-      return acc
+      { return acc }
 
     if (key === 'content' && value.charAt(0) !== '"')
-      acc[key] = '"' + value + '"';
+      { acc[key] = '"' + value + '"'; }
     else
-      acc[key in vendorMap ? vendorMap[key] : key] = addPx(key, value);
+      { acc[key in vendorMap ? vendorMap[key] : key] = addPx(key, value); }
 
     return acc
   }, {})
 }
 
 function assign(obj, obj2) {
-  for (const key in obj2) {
+  for (var key in obj2) {
     if (obj2.hasOwnProperty(key))
-      obj[key] = obj2[key];
+      { obj[key] = obj2[key]; }
   }
 }
 
@@ -129,7 +131,7 @@ function initials(camelCase) {
 }
 
 function short(prop) {
-  const acronym = initials(prop)
+  var acronym = initials(prop)
       , short = popular[acronym] && popular[acronym] !== prop ? prop : acronym;
 
   shorts[short] = prop;
@@ -139,12 +141,12 @@ function short(prop) {
 
 
 function objectToRules(style) {
-  const base = {}
+  var base = {}
       , rules = [];
 
-  let hasBase = false;
+  var hasBase = false;
 
-  Object.keys(style).forEach(key => {
+  Object.keys(style).forEach(function (key) {
     if (key.charAt(0) === '@') {
       rules.push(key + '{' + objectToRules(style[key]) + '}');
     } else if (key.charAt(0) === ' ' || key.charAt(0) === ':') {
@@ -156,7 +158,7 @@ function objectToRules(style) {
   });
 
   if (hasBase)
-    rules.unshift(selectorBlock('.$', base));
+    { rules.unshift(selectorBlock('.$', base)); }
 
   return rules
 }
@@ -168,14 +170,14 @@ function selectorBlock(selector, style) {
 }
 
 function stylesToCss(style) {
-  return Object.keys(style).map(k => propToString(style, k)).join('')
+  return Object.keys(style).map(function (k) { return propToString(style, k); }).join('')
 }
 
 function stringToObject(string) {
-  return string.replace(/;/g, '\n').split('\n').reduce((acc, line) => {
-    const tokens = line.trim().split(/[: ]/);
+  return string.replace(/;/g, '\n').split('\n').reduce(function (acc, line) {
+    var tokens = line.trim().split(/[: ]/);
     if (tokens.length > 1) {
-      const key = hyphenToCamelCase(tokens.shift().trim());
+      var key = hyphenToCamelCase(tokens.shift().trim());
       acc[shorts[key] || key] = addPx(shorts[key] || key, tokens.join(' ').trim());
     }
     return acc
@@ -193,17 +195,17 @@ function addPx(key, value) {
   return value + (isNaN(value) ? '' : appendPx(key))
 }
 
-const document$1 = window.document;
-const classes = Object.create(null, {});
-const styleSheet = document$1 && document$1.createElement('style');
+var document$1 = window.document;
+var classes = Object.create(null, {});
+var styleSheet = document$1 && document$1.createElement('style');
 styleSheet && document$1.head.appendChild(styleSheet);
-const sheet = styleSheet && styleSheet.sheet;
+var sheet = styleSheet && styleSheet.sheet;
 
-let debug = false;
-let rules = [];
-let count$1 = 0;
+var debug = false;
+var rules = [];
+var count$1 = 0;
 
-const classPrefix = 'b' + ('000' + ((Math.random() * 46656) | 0).toString(36)).slice(-3) +
+var classPrefix = 'b' + ('000' + ((Math.random() * 46656) | 0).toString(36)).slice(-3) +
                     ('000' + ((Math.random() * 46656) | 0).toString(36)).slice(-3);
 
 function setDebug(d) {
@@ -211,7 +213,7 @@ function setDebug(d) {
 }
 
 function getSheet() {
-  const content = rules.join('');
+  var content = rules.join('');
   rules = [];
   return content
 }
@@ -220,7 +222,7 @@ function insert(rule, index) {
   rules.push(rule);
 
   if (debug)
-    return styleSheet.textContent += rule
+    { return styleSheet.textContent += rule }
 
   sheet && sheet.insertRule(rule, arguments.length > 1
     ? index
@@ -229,16 +231,15 @@ function insert(rule, index) {
 }
 
 function createClass(style) {
-  const rules = objectToRules(style)
+  var rules = objectToRules(style)
       , css = rules.join('');
 
   if (css in classes)
-    return classes[css]
+    { return classes[css] }
 
-  const className = classPrefix + (++count$1);
+  var className = classPrefix + (++count$1);
 
-  rules.map(rule =>
-    insert(rule.replace(/\.\$/, '.' + className))
+  rules.map(function (rule) { return insert(rule.replace(/\.\$/, '.' + className)); }
   );
 
   classes[css] = className;
@@ -246,18 +247,17 @@ function createClass(style) {
   return className
 }
 
-let count = 0;
-const keyframeCache = {};
+var count = 0;
+var keyframeCache = {};
 
 var keyframes = function(props) {
-  const content = Object.keys(props).map(key =>
-    selectorBlock(key, props[key].style || props[key])
+  var content = Object.keys(props).map(function (key) { return selectorBlock(key, props[key].style || props[key]); }
   ).join('');
 
   if (content in keyframeCache)
-    return keyframeCache[content]
+    { return keyframeCache[content] }
 
-  const name = classPrefix + ++count;
+  var name = classPrefix + ++count;
   keyframeCache[content] = name;
   insert('@keyframes ' + name + '{' + content + '}');
 
@@ -341,17 +341,17 @@ bss.css = css;
 bss.classPrefix = classPrefix;
 
 function chain(instance) {
-  const newInstance = Object.create(bss, { style: { value: instance.style } });
+  var newInstance = Object.create(bss, { style: { value: instance.style } });
 
   if (instance === bss)
-    bss.style = {};
+    { bss.style = {}; }
 
   return newInstance
 }
 
-cssProperties.forEach(prop => {
+cssProperties.forEach(function (prop) {
   if (vendorRegex.test(prop)) {
-    const unprefixed = lowercaseFirst(prop.replace(vendorRegex, '$2'));
+    var unprefixed = lowercaseFirst(prop.replace(vendorRegex, '$2'));
     if (cssProperties.indexOf(unprefixed) === -1) {
       vendorMap[unprefixed] = prop;
       bss[unprefixed] = bss[short(unprefixed)] = setter(prop);
@@ -383,20 +383,20 @@ bss.$nest = function(value, style) {
   return chain(this)
 };
 
-pseudos.forEach(name =>
-  bss['$' + hyphenToCamelCase(name)] = function(value, b) {
+pseudos.forEach(function (name) { return bss['$' + hyphenToCamelCase(name)] = function(value, b) {
     this.style[':' + name + (b ? '(' + value + ')' : '')] = parse(b || value);
     return chain(this)
-  }
+  }; }
 );
 
 function setter(prop) {
   return function CssProperty(value) {
-    for (let i = 0; i < arguments.length; i++) {
-      if (prop in this.style)
-        this.style[prop] += ' ' + addPx(prop, arguments[i]);
-      else if (arguments[i] || arguments[i] === 0)
-        this.style[prop] = addPx(prop, arguments[i]);
+    if (!value && value !== 0) {
+      delete this.style[prop];
+    } else if (arguments.length > 0) {
+      this.style[prop] = arguments.length === 1
+        ? addPx(prop, value)
+        : Array.prototype.slice.call(arguments).map(function (v) { return addPx(prop, v); }).join(' ');
     }
 
     return chain(this)
@@ -405,14 +405,14 @@ function setter(prop) {
 
 function css(selector, style) {
   if (arguments.length === 1)
-    return Object.keys(selector).forEach(key => css(key, selector[key]))
+    { return Object.keys(selector).forEach(function (key) { return css(key, selector[key]); }) }
 
   insert(selectorBlock(selector, parse(style)), 0);
 }
 
 function helper(name, styling) {
   if (arguments.length === 1)
-    return Object.keys(name).forEach(key => helper(key, name[key]))
+    { return Object.keys(name).forEach(function (key) { return helper(key, name[key]); }) }
 
   if (typeof styling === 'object') {
     delete bss[name]; // Needed to avoid weird get calls in chrome
@@ -426,14 +426,13 @@ function helper(name, styling) {
   }
 
   bss[name] = function Helper() {
-    const result = styling.apply(null, arguments);
+    var result = styling.apply(null, arguments);
     assign(this.style, result.style);
     return chain(this)
   };
 }
 
-bss.helper('$animate', (value, props) =>
-  bss.animation(bss.$keyframes(props) + ' ' + value)
+bss.helper('$animate', function (value, props) { return bss.animation(bss.$keyframes(props) + ' ' + value); }
 );
 
 return bss;
