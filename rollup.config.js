@@ -4,11 +4,13 @@ import filesize from 'rollup-plugin-filesize'
 
 export default [
   {
-    entry: 'lib/index.js',
-    dest: 'bss.js',
-    format: 'umd',
-    moduleName: 'b',
-    sourceMap: true,
+    input: 'lib/index.js',
+    output: {
+      file: 'bss.js',
+      format: 'umd',
+      name: 'b',
+      sourcemap: true
+    },
     exports: 'default',
     plugins: process.env.TEST
       ? []
@@ -17,11 +19,13 @@ export default [
         filesize()
       ]
   }, {
-    entry: 'lib/index.js',
-    dest: 'bss.min.js',
-    format: 'umd',
-    moduleName: 'b',
-    sourceMap: true,
+    input: 'lib/index.js',
+    output: {
+      file: 'bss.min.js',
+      format: 'umd',
+      name: 'b',
+      sourcemap: true
+    },
     exports: 'default',
     plugins: [
       buble(),
