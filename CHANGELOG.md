@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## 1.0.4 -
+
+Fixed property resolution bug in firefox
+
 ## 1.0.3 - 
 
 Added `letter-spacing` as preferred `ls` shortname

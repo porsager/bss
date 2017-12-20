@@ -43,9 +43,7 @@ var shorts = Object.create(null);
 
 var style = window.getComputedStyle(document.documentElement, null);
 
-var cssProperties = style && typeof style.width === 'string'
-  ? Object.keys(style).filter(function (a) { return a % 1 !== 0; })
-  : Array.prototype.slice.call(style, 0, style.length).map(hyphenToCamelCase);
+var cssProperties = Array.prototype.slice.call(style, 0, style.length).map(hyphenToCamelCase);
 
 var vendorMap = Object.create(null, {});
 
