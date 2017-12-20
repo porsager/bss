@@ -29,7 +29,7 @@ global.document = {
 }
 
 global.window = {
-  getComputedStyle: () => ({ width: '', backgroundColor: '', padding: '' }),
+  getComputedStyle: () => (['width', 'backgroundColor', 'padding']),
   navigator: {
     userAgent: 'test'
   }
