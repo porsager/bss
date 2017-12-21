@@ -41,9 +41,15 @@ var popular = {
 
 var shorts = Object.create(null);
 
-var style = window.getComputedStyle(document.documentElement, null);
+var cssProperties = Object.keys(
+  findWidth(document.documentElement.style)
+).filter(function (prop) { return typeof document.documentElement.style[prop] === 'string'; });
 
-var cssProperties = Array.prototype.slice.call(style, 0, style.length).map(hyphenToCamelCase);
+function findWidth(obj) {
+  return obj.hasOwnProperty('width')
+    ? obj
+    : findWidth(Object.getPrototypeOf(obj))
+}
 
 var vendorMap = Object.create(null, {});
 
