@@ -54,6 +54,11 @@ o.spec('bss', function() {
     o(b('foo', 'bar').style).deepEquals({ foo: 'bar' })
   })
 
+  o('multiline input', function() {
+    o(b('t s(1)\n,r(0)').style).deepEquals({ t: 's(1),r(0)' })
+    o(b('t s(1),\nr(0)').style).deepEquals({ t: 's(1),r(0)' })
+  })
+
   o('default css properties', function() {
     o(b.bc('green').style).deepEquals({ backgroundColor: 'green' })
     o(b.p(20, 10, '50%').style).deepEquals({ padding: '20px 10px 50%' })
