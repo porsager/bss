@@ -124,14 +124,14 @@ b.backgroundColor('black')
 
 The `.class` getter closes the current style description, creates a class name, adds the styles to a stylesheet in `<head>` and returns the class name
 ``` js
-b.textAlign('green').class // Returns eg. bdp4f3o1
+b.textAlign('center').class // Returns eg. bdp4f3o1
 ```
 
 ### `.style`
 
 The `.style` getter also closes the current style description and return a JS object with the styles
 ``` js
-b.textAlign('green').style // Returns { textAlign: 'green' }
+b.textAlign('center').style // Returns { textAlign: 'center' }
 ```
 
 ### `valueOf()`
@@ -139,14 +139,14 @@ b.textAlign('green').style // Returns { textAlign: 'green' }
 `.valueOf()` will be called if b is used like `'div' + b` because javascript casts automatically using `.valueOf()`.
 Casting `b` to a string will call `.class` and prepend a period for easy use in vdom libraries.
 ``` js
-'div' + b.textAlign('green') // Returns eg. div.bdp4f3o1
+'div' + b.textAlign('center') // Returns eg. div.bdp4f3o1
 ```
 
 You can also override `.valueOf` if you set classNames instead of selectors
 ``` 
 b.valueOf = function() { return b.class + ' ' }
 
-`<div class="${ b.textAlign('green') }`"></div>` // Returns eg. <div class="bdp4f3o1"></div>
+`<div class="${ b.textAlign('center') }`"></div>` // Returns eg. <div class="bdp4f3o1"></div>
 ```
 
 ## Short property names
