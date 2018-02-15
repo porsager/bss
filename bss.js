@@ -43,13 +43,47 @@ var shorts = Object.create(null);
 
 var cssProperties = Object.keys(
   findWidth(document.documentElement.style)
-).filter(function (prop) { return typeof document.documentElement.style[prop] === 'string'; });
+).filter(function (p) { return p.indexOf('-') === -1; });
 
 function findWidth(obj) {
   return obj.hasOwnProperty('width')
     ? obj
     : findWidth(Object.getPrototypeOf(obj))
 }
+
+var memoize = function (fn, cache) {
+  if ( cache === void 0 ) cache = {};
+
+  return function (item) { return item in cache
+    ? cache[item]
+    : cache[item] = fn(item); };
+};
+
+var stringToObject = memoize(function (string) {
+  var last = ''
+    , prev;
+
+  return string.replace(/;/g, '\n').split('\n').reduce(function (acc, line) {
+    line = last + line.trim();
+    last = line.endsWith(',') ? line : '';
+    if (last)
+      { return acc }
+
+    if (line.startsWith(',')) {
+      acc[prev] += line;
+      return acc
+    }
+
+    var tokens = line.split(/[:\s]/);
+    if (tokens.length > 1) {
+      var key = hyphenToCamelCase(tokens.shift().trim());
+      prev = shorts[key] || key;
+
+      acc[prev] = tokens.filter(function (a) { return a; }).map(function (t) { return addPx(prev, t.trim()); }).join(' ');
+    }
+    return acc
+  }, {})
+});
 
 var vendorMap = Object.create(null, {});
 
@@ -70,14 +104,6 @@ function parse(input, value) {
 
   return input.style || sanitize(input)
 }
-
-var memoize = function (fn, cache) {
-  if ( cache === void 0 ) cache = {};
-
-  return function (item) { return item in cache
-    ? cache[item]
-    : cache[item] = fn(item); };
-};
 
 var appendPx = memoize(function (prop) {
   var el = document.createElement('div');
@@ -175,17 +201,6 @@ function selectorBlock(selector, style) {
 
 function stylesToCss(style) {
   return Object.keys(style).map(function (k) { return propToString(style, k); }).join('')
-}
-
-function stringToObject(string) {
-  return string.replace(/;/g, '\n').split('\n').reduce(function (acc, line) {
-    var tokens = line.trim().split(/[: ]/);
-    if (tokens.length > 1) {
-      var key = hyphenToCamelCase(tokens.shift().trim());
-      acc[shorts[key] || key] = addPx(shorts[key] || key, tokens.join(' ').trim());
-    }
-    return acc
-  }, {})
 }
 
 
@@ -378,12 +393,16 @@ Object.defineProperty(bss, 'class', {
 });
 
 bss.$media = function(value, style) {
-  this.style['@media ' + value] = parse(style);
+  if (value)
+    { this.style['@media ' + value] = parse(style); }
+
   return chain(this)
 };
 
 bss.$nest = function(value, style) {
-  this.style[(value.charAt(0) === ':' ? '' : ' ') + value] = parse(style);
+  if (value)
+    { this.style[value] = parse(style); }
+
   return chain(this)
 };
 
