@@ -1,5 +1,19 @@
 ## [Unreleased]
 
+## 1.0.7 -
+
+Fix regression that snuck in with a 1.0.6 commit
+
+## 1.0.6 -
+
+Support comma separated prop values on multiple lines fixes
+Allow px for multiple values in shorthand lean string
+Allow conditionals for `$media` and `$nest`
+
+## 1.0.5 -
+
+Revert usage of getComputedStyle for prop resolution
+
 ## 1.0.4 -
 
 Fixed property resolution bug in firefox

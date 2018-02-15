@@ -7,11 +7,11 @@ export default [
     input: 'lib/index.js',
     output: {
       file: 'bss.js',
+      exports: 'default',
       format: 'umd',
       name: 'b',
       sourcemap: true
     },
-    exports: 'default',
     plugins: process.env.TEST
       ? []
       : [
@@ -22,11 +22,11 @@ export default [
     input: 'lib/index.js',
     output: {
       file: 'bss.min.js',
+      exports: 'default',
       format: 'umd',
       name: 'b',
       sourcemap: true
     },
-    exports: 'default',
     plugins: [
       buble(),
       uglify({ mangle: true, compress: true }),
