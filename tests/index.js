@@ -62,6 +62,7 @@ o.spec('bss', function() {
   o('default css properties', function() {
     o(b.bc('green').style).deepEquals({ backgroundColor: 'green' })
     o(b.p(20, 10, '50%').style).deepEquals({ padding: '20px 10px 50%' })
+    o(b`p 20 10 50%`.style).deepEquals({ padding: '20px 10px 50%' })
     o(b.backgroundColor('red').style).deepEquals({ backgroundColor: 'red' })
   })
 
