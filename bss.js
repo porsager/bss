@@ -401,7 +401,7 @@ bss.$media = function(value, style) {
 
 bss.$nest = function(value, style) {
   if (value)
-    { this.style[value] = parse(style); }
+    { this.style[(value.charAt(0) === ':' ? '' : ' ') + value] = parse(style); }
 
   return chain(this)
 };
