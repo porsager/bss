@@ -379,7 +379,8 @@ cssProperties.forEach(function (prop) {
     var unprefixed = lowercaseFirst(prop.replace(vendorRegex, '$2'));
     if (cssProperties.indexOf(unprefixed) === -1) {
       vendorMap[unprefixed] = prop;
-      bss[unprefixed] = bss[short(unprefixed)] = setter(prop);
+      setProp(unprefixed, setter(prop));
+      setProp(bss[unprefixed]);
       return
     }
   }
