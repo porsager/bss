@@ -37,7 +37,7 @@ var popular = {
   td : 'textDecoration',
   tt : 'textTransform',
   w  : 'width'
-};
+}
 
 var shorts = Object.create(null);
 
@@ -61,7 +61,7 @@ var memoize = function (fn, cache) {
 
 var stringToObject = memoize(function (string) {
   var last = ''
-    , prev;
+    , prev;;
 
   return string.replace(/;/g, '\n').split('\n').reduce(function (acc, line) {
     line = last + line.trim();
@@ -162,17 +162,15 @@ function initials(camelCase) {
 
 function short(prop) {
   var acronym = initials(prop)
-      , short = popular[acronym] && popular[acronym] !== prop ? prop : acronym;
+      , short = popular[acronym] && popular[acronym] !== prop ? prop : acronym;;
 
   shorts[short] = prop;
   return short
 }
 
-
-
 function objectToRules(style) {
   var base = {}
-      , rules = [];
+      , rules = [];;
 
   var hasBase = false;
 
@@ -203,8 +201,6 @@ function stylesToCss(style) {
   return Object.keys(style).map(function (k) { return propToString(style, k); }).join('')
 }
 
-
-
 function propToString(style, k) {
   return (vendorRegex.test(k) ? '-' : '')
   + camelCaseToHyphen(k) + ':' + style[k] + ';'
@@ -222,7 +218,7 @@ var sheet = styleSheet && styleSheet.sheet;
 
 var debug = false;
 var rules = [];
-var count$1 = 0;
+var count = 0;
 
 var classPrefix = 'b' + ('000' + ((Math.random() * 46656) | 0).toString(36)).slice(-3) +
                     ('000' + ((Math.random() * 46656) | 0).toString(36)).slice(-3);
@@ -251,12 +247,12 @@ function insert(rule, index) {
 
 function createClass(style) {
   var rules = objectToRules(style)
-      , css = rules.join('');
+      , css = rules.join('');;
 
   if (css in classes)
     { return classes[css] }
 
-  var className = classPrefix + (++count$1);
+  var className = classPrefix + (++count);
 
   rules.map(function (rule) { return insert(rule.replace(/\.\$/, '.' + className)); }
   );
@@ -266,22 +262,22 @@ function createClass(style) {
   return className
 }
 
-var count = 0;
+var count$1 = 0;
 var keyframeCache = {};
 
-var keyframes = function(props) {
+function keyframes(props) {
   var content = Object.keys(props).map(function (key) { return selectorBlock(key, props[key].style || props[key]); }
   ).join('');
 
   if (content in keyframeCache)
     { return keyframeCache[content] }
 
-  var name = classPrefix + ++count;
+  var name = classPrefix + ++count$1;
   keyframeCache[content] = name;
   insert('@keyframes ' + name + '{' + content + '}');
 
   return name
-};
+}
 
 var pseudos = [
   'active',
@@ -338,7 +334,7 @@ var pseudos = [
   'marker',
   'spelling-error',
   'grammar-error'
-];
+]
 
 function bss(input, value) {
   assign(bss.style, parse.apply(null, arguments));
@@ -360,7 +356,12 @@ bss.css = css;
 bss.classPrefix = classPrefix;
 
 function chain(instance) {
-  var newInstance = Object.create(bss, { style: { value: instance.style } });
+  var newInstance = Object.create(bss, {
+    style: {
+      value: instance.style,
+      enumerable: true
+    }
+  });
 
   if (instance === bss)
     { bss.style = {}; }
