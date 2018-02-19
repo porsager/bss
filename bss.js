@@ -343,6 +343,7 @@ function bss(input, value) {
 
 function setProp(prop, value) {
   Object.defineProperty(bss, prop, {
+    configurable: true,
     value: value
   });
 }
@@ -380,12 +381,13 @@ cssProperties.forEach(function (prop) {
     if (cssProperties.indexOf(unprefixed) === -1) {
       vendorMap[unprefixed] = prop;
       setProp(unprefixed, setter(prop));
-      setProp(bss[unprefixed]);
+      setProp(short(unprefixed), bss[unprefixed]);
       return
     }
   }
 
-  bss[prop] = bss[short(prop)] = setter(prop);
+  setProp(prop, setter(prop));
+  setProp(short(prop), bss[prop]);
 });
 
 setProp('content', function Content(arg) {
