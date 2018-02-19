@@ -341,19 +341,24 @@ function bss(input, value) {
   return chain(bss)
 }
 
-bss.setDebug = setDebug;
+function setProp(prop, value) {
+  Object.defineProperty(bss, prop, {
+    value: value
+  });
+}
 
 bss.style = {};
 
-bss.valueOf = function() {
+setProp('setDebug', setDebug);
+setProp('valueOf', function ValueOf() {
   return '.' + this.class
-};
+});
 
-bss.$keyframes = keyframes;
-bss.getSheet = getSheet;
-bss.helper = helper;
-bss.css = css;
-bss.classPrefix = classPrefix;
+setProp('$keyframes', keyframes);
+setProp('getSheet', getSheet);
+setProp('helper', helper);
+setProp('css', css);
+setProp('classPrefix', classPrefix);
 
 function chain(instance) {
   var newInstance = Object.create(bss, {
@@ -382,35 +387,38 @@ cssProperties.forEach(function (prop) {
   bss[prop] = bss[short(prop)] = setter(prop);
 });
 
-bss.content = function(arg) {
+setProp('content', function Content(arg) {
   this.style.content = '"' + arg + '"';
   return chain(this)
-};
+});
 
 Object.defineProperty(bss, 'class', {
+  set: function(value) {
+    this.__class = value;
+  },
   get: function() {
-    return createClass(this.style)
+    return this.__class || createClass(this.style)
   }
 });
 
-bss.$media = function(value, style) {
+setProp('$media', function Media(value, style) {
   if (value)
     { this.style['@media ' + value] = parse(style); }
 
   return chain(this)
-};
+});
 
-bss.$nest = function(value, style) {
+setProp('$nest', function Nest(value, style) {
   if (value)
     { this.style[(value.charAt(0) === ':' ? '' : ' ') + value] = parse(style); }
 
   return chain(this)
-};
+});
 
-pseudos.forEach(function (name) { return bss['$' + hyphenToCamelCase(name)] = function(value, b) {
+pseudos.forEach(function (name) { return setProp('$' + hyphenToCamelCase(name), function Pseudo(value, b) {
     this.style[':' + name + (b ? '(' + value + ')' : '')] = parse(b || value);
     return chain(this)
-  }; }
+  }); }
 );
 
 function setter(prop) {
@@ -438,22 +446,25 @@ function helper(name, styling) {
   if (arguments.length === 1)
     { return Object.keys(name).forEach(function (key) { return helper(key, name[key]); }) }
 
-  if (typeof styling === 'object') {
-    delete bss[name]; // Needed to avoid weird get calls in chrome
+  delete bss[name]; // Needed to avoid weird get calls in chrome
+  typeof styling === 'object'
+    ?
     Object.defineProperty(bss, name, {
+      configurable: true,
       get: function() {
         assign(this.style, parse(styling));
         return chain(this)
       }
+    })
+    :
+    Object.defineProperty(bss, name, {
+      configurable: true,
+      value: function Helper() {
+        var result = styling.apply(null, arguments);
+        assign(this.style, result.style);
+        return chain(this)
+      }
     });
-    return
-  }
-
-  bss[name] = function Helper() {
-    var result = styling.apply(null, arguments);
-    assign(this.style, result.style);
-    return chain(this)
-  };
 }
 
 bss.helper('$animate', function (value, props) { return bss.animation(bss.$keyframes(props) + ' ' + value); }
