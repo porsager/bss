@@ -10,6 +10,7 @@
     "build": "rollup -c"
   },
   "author": "Rasmus Porsager <rasmus@porsager.com>",
+  "repository": "porsager/bss",
   "license": "WTFPL",
   "devDependencies": {},
   "dependencies": {

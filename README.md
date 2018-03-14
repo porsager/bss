@@ -1,6 +1,6 @@
 [![version](https://img.shields.io/npm/v/bss.svg)]() [![gzipped](http://img.badgesize.io/porsager/bss/master/bss.js.svg?compression=gzip&label=gzipped)]() [![license](https://img.shields.io/github/license/porsager/wright.svg)]()
 
-## `bss`
+## 🎨 `bss`
 
 A simpler way to do CSS in Javascript directly on the elements you're styling.
 
