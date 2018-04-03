@@ -79,7 +79,7 @@ var stringToObject = memoize(function (string) {
       var key = hyphenToCamelCase(tokens.shift().trim());
       prev = shorts[key] || key;
 
-      acc[prev] = tokens.filter(function (a) { return a; }).map(function (t) { return addPx(prev, t.trim()); }).join(' ');
+      acc[prev] = tokens.filter(function (a) { return a; }).reduce(function (acc, t) { return acc + addPx(prev, t.trim()) + ' '; }, '').trim();
     }
     return acc
   }, {})
@@ -198,7 +198,7 @@ function selectorBlock(selector, style) {
 }
 
 function stylesToCss(style) {
-  return Object.keys(style).map(function (k) { return propToString(style, k); }).join('')
+  return Object.keys(style).reduce(function (acc, k) { return acc + propToString(style, k); }, '')
 }
 
 function propToString(style, k) {
@@ -246,18 +246,18 @@ function insert(rule, index) {
 }
 
 function createClass(style) {
+  var json = JSON.stringify(style);
+
+  if (json in classes)
+    { return classes[json] }
+
   var rules = objectToRules(style)
-      , css = rules.join('');;
+      , className = classPrefix + (++count);;
 
-  if (css in classes)
-    { return classes[css] }
+  for(var i = 0; i < rules.length; i++)
+    { insert(rules[i].replace(/\.\$/, '.' + className)); }
 
-  var className = classPrefix + (++count);
-
-  rules.map(function (rule) { return insert(rule.replace(/\.\$/, '.' + className)); }
-  );
-
-  classes[css] = className;
+  classes[json] = className;
 
   return className
 }
@@ -266,8 +266,8 @@ var count$1 = 0;
 var keyframeCache = {};
 
 function keyframes(props) {
-  var content = Object.keys(props).map(function (key) { return selectorBlock(key, props[key].style || props[key]); }
-  ).join('');
+  var content = Object.keys(props).reduce(function (acc, key) { return acc + selectorBlock(key, props[key].style || props[key]); }
+  , '');
 
   if (content in keyframeCache)
     { return keyframeCache[content] }
@@ -348,12 +348,17 @@ function setProp(prop, value) {
   });
 }
 
+Object.defineProperty(bss, 'valueOf', {
+  configurable: true,
+  writable: true,
+  value: function ValueOf() {
+    return '.' + this.class
+  }
+});
+
 bss.style = {};
 
 setProp('setDebug', setDebug);
-setProp('valueOf', function ValueOf() {
-  return '.' + this.class
-});
 
 setProp('$keyframes', keyframes);
 setProp('getSheet', getSheet);
