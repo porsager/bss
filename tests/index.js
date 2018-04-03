@@ -131,4 +131,13 @@ o.spec('bss', function() {
       o(b.foo.bar.style).deepEquals({ bar: 'baz', foo: 'bar' })
     })
   })
+
+  o('Override valueOf', function() {
+    const newValueOf = function() {
+      return 'test'
+    }
+    b.valueOf = newValueOf
+    o(b.valueOf).equals(newValueOf)
+    o('' + b.bc('red')).equals('test')
+  })
 })

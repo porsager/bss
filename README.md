@@ -144,7 +144,7 @@ Casting `b` to a string will call `.class` and prepend a period for easy use in 
 
 You can also override `.valueOf` if you set classNames instead of selectors
 ``` 
-b.valueOf = function() { return b.class + ' ' }
+b.valueOf = function() { return this.class + ' ' }
 
 `<div class="${ b.textAlign('center') }`"></div>` // Returns eg. <div class="bdp4f3o1"></div>
 ```
