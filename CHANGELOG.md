@@ -1,5 +1,17 @@
 ## [Unreleased]
 
+## 1.1.6 -
+Fix Safari 9 bug
+
+## 1.1.5 -
+Fix overriding `valueOf`
+
+## 1.1.3 -
+Clean up enumerable properties for better vdom integration
+
+## 1.1.0 - 
+Make the style property enumerable for easy composition using spread in attributes
+
 ## 1.0.7 -
 
 Fix regression that snuck in with a 1.0.6 commit

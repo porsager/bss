@@ -43,7 +43,7 @@ var shorts = Object.create(null);
 
 var cssProperties = Object.keys(
   findWidth(document.documentElement.style)
-).filter(function (p) { return p.indexOf('-') === -1; });
+).filter(function (p) { return p.indexOf('-') === -1 && p !== 'length'; });
 
 function findWidth(obj) {
   return obj.hasOwnProperty('width')
