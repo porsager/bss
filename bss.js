@@ -19,6 +19,7 @@ var popular = {
   h  : 'height',
   jc : 'justifyContent',
   l  : 'left',
+  lh : 'lineHeight',
   ls : 'letterSpacing',
   m  : 'margin',
   mb : 'marginBottom',
@@ -65,7 +66,7 @@ var stringToObject = memoize(function (string) {
 
   return string.replace(/;/g, '\n').split('\n').reduce(function (acc, line) {
     line = last + line.trim();
-    last = line.endsWith(',') ? line : '';
+    last = line.slice(-1) === ',' ? line : '';
     if (last)
       { return acc }
 
@@ -237,7 +238,7 @@ function insert(rule, index) {
   rules.push(rule);
 
   if (debug)
-    { return styleSheet.textContent += rule }
+    { return styleSheet.textContent = rules.join('\n') }
 
   sheet && sheet.insertRule(rule, arguments.length > 1
     ? index

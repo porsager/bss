@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## 1.1.7 -
+Fix browsers that doesn't support endsWith
+Add shorthand `lh` for lineHeight
+Fix rules missing in debug mode
+
 ## 1.1.6 -
 Fix Safari 9 bug
 
