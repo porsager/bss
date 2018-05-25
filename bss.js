@@ -70,7 +70,7 @@ var stringToObject = memoize(function (string) {
     if (last)
       { return acc }
 
-    if (line.startsWith(',')) {
+    if (line.charAt(0) === ',') {
       acc[prev] += line;
       return acc
     }
@@ -87,6 +87,7 @@ var stringToObject = memoize(function (string) {
 });
 
 var vendorMap = Object.create(null, {});
+var vendorValuePrefix = Object.create(null, {});
 
 var vendorRegex = /^(o|O|ms|MS|Ms|moz|Moz|webkit|Webkit|WebKit)([A-Z])/;
 
@@ -134,7 +135,7 @@ function sanitize(styles) {
     if (key === 'content' && value.charAt(0) !== '"')
       { acc[key] = '"' + value + '"'; }
     else
-      { acc[key in vendorMap ? vendorMap[key] : key] = addPx(key, value); }
+      { acc[key in vendorMap ? vendorMap[key] : key] = formatValue(key, value); }
 
     return acc
   }, {})
@@ -205,6 +206,12 @@ function stylesToCss(style) {
 function propToString(style, k) {
   return (vendorRegex.test(k) ? '-' : '')
   + camelCaseToHyphen(k) + ':' + style[k] + ';'
+}
+
+function formatValue(key, value) {
+  return value in vendorValuePrefix
+    ? vendorValuePrefix[value]
+    : addPx(key, value)
 }
 
 function addPx(key, value) {
@@ -382,9 +389,13 @@ function chain(instance) {
 }
 
 cssProperties.forEach(function (prop) {
-  if (vendorRegex.test(prop)) {
+  var vendor = prop.match(vendorRegex);
+  if (vendor) {
     var unprefixed = lowercaseFirst(prop.replace(vendorRegex, '$2'));
     if (cssProperties.indexOf(unprefixed) === -1) {
+      if (unprefixed === 'flexDirection')
+        { vendorValuePrefix.flex = '-' + vendor[1].toLowerCase() + '-flex'; }
+
       vendorMap[unprefixed] = prop;
       setProp(unprefixed, setter(prop));
       setProp(short(unprefixed), bss[unprefixed]);
@@ -425,7 +436,8 @@ setProp('$nest', function Nest(value, style) {
 });
 
 pseudos.forEach(function (name) { return setProp('$' + hyphenToCamelCase(name), function Pseudo(value, b) {
-    this.style[':' + name + (b ? '(' + value + ')' : '')] = parse(b || value);
+    if (value || b)
+      { this.style[':' + name + (b ? '(' + value + ')' : '')] = parse(b || value); }
     return chain(this)
   }); }
 );
@@ -436,7 +448,7 @@ function setter(prop) {
       delete this.style[prop];
     } else if (arguments.length > 0) {
       this.style[prop] = arguments.length === 1
-        ? addPx(prop, value)
+        ? formatValue(prop, value)
         : Array.prototype.slice.call(arguments).map(function (v) { return addPx(prop, v); }).join(' ');
     }
 

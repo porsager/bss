@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## 1.1.8 -
+Automatically add vendor prefix to display: flex value (eg. -webkit-flex)
+Fix browsers that doesn't support startsWith
+
 ## 1.1.7 -
 Fix browsers that doesn't support endsWith
 Add shorthand `lh` for lineHeight
