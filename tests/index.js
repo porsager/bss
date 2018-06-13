@@ -28,6 +28,7 @@ global.document = {
   },
   documentElement: {
     style: {
+      display: '',
       backgroundColor: '',
       content: '',
       width: '0',
@@ -66,9 +67,26 @@ o.spec('bss', function() {
     o(b.backgroundColor('red').style).deepEquals({ backgroundColor: 'red' })
   })
 
+  o('recursive nest', function() {
+
+  })
+
   o('css class generation', function() {
     const cls = b`foo: bar;`.class
     o(b.getSheet()).equals(`.${cls}{foo:bar;}`)
+  })
+
+  o('same named properties string', function() {
+    const cls = b`
+      display -webkit-flex
+      display flex
+    `.class
+    o(b.getSheet()).equals(`.${cls}{display:-webkit-flex;display:flex;}`)
+  })
+
+  o('same named properties function', function() {
+    const cls = b.d('-webkit-flex').d('flex').class
+    o(b.getSheet()).equals(`.${cls}{display:-webkit-flex;display:flex;}`)
   })
 
   o('pseudo', function() {
