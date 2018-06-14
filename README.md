@@ -35,8 +35,7 @@ Or download and include - [download bss.js](https://unpkg.com/bss/bss.js)
 
 ## Example usage
 
-Here's a quick example of using bss togher with [mithril](https://github.com/mithriljs/mithril.js)
-See the example [live here](https://flems.io/#0=N4IgtglgJlA2CmIBcBWFA6AzCgNCA9gK4AuADicsQE6Hx4DO8CAxsfFMiOgFb0h4AzCAj5IA2qAB2AQzCIkXXvxDN8ktus4JiAAjU6AvDuq0AOpPNh0YIuoAUUfM0Jz16AEb4oATxw7g5jo6AG4Q8ADuSCGSXvCGAHw6YHYA5AAWAIwpOgDUOu4ezKlU7CkAlOhFKeFpEGzl6AL0dpgATBXE0qnM8OrwVOV+AZJBQfTE3ghRBe5F+gBk8zopAOYlvQ3jk3SBo2rMsBDMANZRdmUJeiNGAIRquwC+fikAEkyw+Drh+FSwUOXmB5lEAPAC6eEOkmOogkIEIv04aWIZHoSAA9GjCJJSMcVpV8GA0ZBiGkqMIAAIZdBUzDKCakeQgJR4UjSYjMNLwGFiDJ4dgASUkUHgAA9TCBlLsdModAAfWU6NnUfgZABsOFaAAYcJhMGrMDq9arMOCeXhWOxxTpFjK7FKgjLgjFhegODg1RqACyGjIATgNur9JpwZpAxAgwXgAFEEK5iOYZaMgvLorFXQT0KySuoY-A44YDEYdAASRzMdDSVgR6Ox3rxkajMoJvCmYgPcytgRYqtqfitb0ADgA7IbWnrR3rQaCnqB4bBEcjSKiMVicXjVIT3PQ+Hh6YylGCHkA)
+Here's a quick example of using bss together with [mithril](https://github.com/mithriljs/mithril.js) - see the example [live here](https://flems.io/#0=N4IgtglgJlA2CmIBcBWFA6AzCgNCA9gK4AuADicsQE6Hx4DO8CAxsfFMiOgFb0h4AzCAj5IA2qAB2AQzCIkXXvxDN8ktus4JiAAjU6AvDuq0AOpPNh0YIuoAUUfM0Jz16AEb4oATxw7g5jo6AG4Q8ADuSCGSXvCGAHw6YHYA5AAWAIwpOgDUOu4ezKlU7CkAlOhFKeFpEGzl6AL0dpgATBXE0qnM8OrwVOV+AZJBQfTE3ghRBe5F+gBk8zopAOYlvQ3jk3SBo2rMsBDMANZRdmUJeiNGAIRquwC+fikAEkyw+Drh+FSwUOXmB5lEAPAC6eEOkmOogkIEIv04aWIZHoSAA9GjCJJSMcVpV8GA0ZBiGkqMIAAIZdBUzDKCakeQgJR4UjSYjMNLwGFiDJ4dgASUkUHgAA9TCBlLsdModAAfWU6NnUfgZABsOFaAAYcJhMGrMDq9arMOCeXhWOxxTpFjK7FKgjLgjFhegODg1RqACyGjIATgNur9JpwZpAxAgwXgAFEEK5iOYZaMgvLorFXQT0KySuoY-A44YDEYdAASRzMdDSVgR6Ox3rxkajMoJvCmYgPcytgRYqtqfitb0ADgA7IbWnrR3rQaCnqB4bBEcjSKiMVicXjVIT3PQ+Hh6YylGCHkA)
 
 ``` js
 // Some js file
@@ -161,7 +160,7 @@ b.bc('black')
  )
 ```
 
-## `.helper
+## `.helper`
 
 Define your own helpers to work in a fashion similar to tachyons, or simply to make your life easier.
 
