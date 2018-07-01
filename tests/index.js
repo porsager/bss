@@ -104,6 +104,16 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`:root .${cls}{-webkit-overflow-scrolling:touch;}`)
   })
 
+  o('nest', function() {
+    const cls = b.$nest('li', b('-webkit-overflow-scrolling touch')).class
+    o(b.getSheet()).equals(`.${cls} li{-webkit-overflow-scrolling:touch;}`)
+  })
+
+  o('nest multiple selectors', function() {
+    const cls = b.$nest('th, tr', b('background blue')).class
+    o(b.getSheet()).equals(`.${cls} th{background:blue;}.${cls} tr{background:blue;}`)
+  })
+
   o('add px', function() {
     o(b`w 1`.style).deepEquals({ width: '1px' })
     o(b('width 1').style).deepEquals({ width: '1px' })
