@@ -96,7 +96,7 @@ o.spec('bss', function() {
 
   o('empty content string is set to ""', function() {
     const cls = b.$before(b.content('')).$after(b({ content: '' })).class
-    o(b.getSheet()).equals(`:root .${cls}:before{content:"";}:root .${cls}:after{content:"";}`)
+    o(b.getSheet()).equals(`:root .${cls}::before{content:"";}:root .${cls}::after{content:"";}`)
   })
 
   o('allows vendor prefix', function() {
