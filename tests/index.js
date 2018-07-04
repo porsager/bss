@@ -71,9 +71,14 @@ o.spec('bss', function() {
 
   })
 
-  o('css class generation', function() {
+  o('css doulbe class for specificity generation', function() {
     const cls = b`foo: bar;`.class
-    o(b.getSheet()).equals(`:root .${cls}{foo:bar;}`)
+    o(b.getSheet()).equals(`.${cls}.${cls}{foo:bar;}`)
+  })
+
+  o('pseudo', function() {
+    const cls = b.$hover(b.bc('green')).class
+    o(b.getSheet()).equals(`.${cls}.${cls}:hover{background-color:green;}`)
   })
 
   o('same named properties string', function() {
@@ -81,30 +86,25 @@ o.spec('bss', function() {
       display -webkit-flex
       display flex
     `.class
-    o(b.getSheet()).equals(`:root .${cls}{display:-webkit-flex;display:flex;}`)
+    o(b.getSheet()).equals(`.${cls}.${cls}{display:-webkit-flex;display:flex;}`)
   })
 
   o('same named properties function', function() {
     const cls = b.d('-webkit-flex').d('flex').class
-    o(b.getSheet()).equals(`:root .${cls}{display:-webkit-flex;display:flex;}`)
-  })
-
-  o('pseudo', function() {
-    const cls = b.$hover(b.bc('green')).class
-    o(b.getSheet()).equals(`:root .${cls}:hover{background-color:green;}`)
+    o(b.getSheet()).equals(`.${cls}.${cls}{display:-webkit-flex;display:flex;}`)
   })
 
   o('empty content string is set to ""', function() {
     const cls = b.$before(b.content('')).$after(b({ content: '' })).class
-    o(b.getSheet()).equals(`:root .${cls}::before{content:"";}:root .${cls}::after{content:"";}`)
+    o(b.getSheet()).equals(`.${cls}.${cls}::before{content:"";}.${cls}.${cls}::after{content:"";}`)
   })
 
   o('allows vendor prefix', function() {
     const cls = b('-webkit-overflow-scrolling touch').class
-    o(b.getSheet()).equals(`:root .${cls}{-webkit-overflow-scrolling:touch;}`)
+    o(b.getSheet()).equals(`.${cls}.${cls}{-webkit-overflow-scrolling:touch;}`)
   })
 
-  o('nest', function() {
+  o('single class for less specificity when using $nest', function() {
     const cls = b.$nest('li', b('-webkit-overflow-scrolling touch')).class
     o(b.getSheet()).equals(`.${cls} li{-webkit-overflow-scrolling:touch;}`)
   })
