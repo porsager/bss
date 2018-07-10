@@ -104,6 +104,11 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`.${cls}.${cls}{-webkit-overflow-scrolling:touch;}`)
   })
 
+  o('allows css variables', function() {
+    const cls = b('--primary white').class
+    o(b.getSheet()).equals(`.${cls}.${cls}{--primary:white;}`)
+  })
+
   o('single class for less specificity when using $nest', function() {
     const cls = b.$nest('li', b('-webkit-overflow-scrolling touch')).class
     o(b.getSheet()).equals(`.${cls} li{-webkit-overflow-scrolling:touch;}`)
