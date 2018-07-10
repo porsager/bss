@@ -1,5 +1,16 @@
 ## [Unreleased]
 
+## 1.2.0 -
+Fix missing pseudo/nest objects on instance reuse
+Fix pseduo element support by using `::`
+Fix consecutive selectors in `$nest` being applied as globals
+Fix common specificity issue by using double class names
+Add object overload to $nest
+Fix multiple definitions in @media blocks
+Fix Edge missing `float` detection
+Support multiple same named props
+Add support for recursive $nest
+
 ## 1.1.8 -
 Automatically add vendor prefix to display: flex value (eg. -webkit-flex)
 Fix browsers that doesn't support startsWith
