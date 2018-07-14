@@ -56,8 +56,8 @@ o.spec('bss', function() {
   })
 
   o('multiline input', function() {
-    o(b('t s(1)\n,r(0)').style).deepEquals({ t: 's(1),r(0)' })
-    o(b('t s(1),\nr(0)').style).deepEquals({ t: 's(1),r(0)' })
+    o(b('transform scale(1)\n,rotate(0)').style).deepEquals({ transform: 'scale(1),rotate(0)' })
+    o(b('transform scale(1),\nrotate(0)').style).deepEquals({ transform: 'scale(1),rotate(0)' })
   })
 
   o('default css properties', function() {
@@ -162,6 +162,17 @@ o.spec('bss', function() {
         bar: b`foo bar`
       })
       o(b.foo.bar.style).deepEquals({ bar: 'baz', foo: 'bar' })
+    })
+
+    o('helpers in strings', function() {
+      b.helper({
+        size: (w, h) => b(`width ${w};height ${h}`),
+        pointer: b('cursor pointer')
+      })
+      o(b`
+        size 20 20
+        pointer
+      `.style).deepEquals({ width: '20px', height: '20px', cursor: 'pointer' })
     })
   })
 
