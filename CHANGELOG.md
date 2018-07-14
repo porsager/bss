@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## 1.2.1 -
+Support helpers in strings
+Fix support for css variables
+
 ## 1.2.0 -
 Fix missing pseudo/nest objects on instance reuse
 Fix pseduo element support by using `::`

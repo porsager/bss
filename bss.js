@@ -4,44 +4,6 @@
   (global.b = factory());
 }(this, (function () { 'use strict';
 
-  var popular = {
-    ai : 'alignItems',
-    b  : 'bottom',
-    bc : 'backgroundColor',
-    br : 'borderRadius',
-    bs : 'boxShadow',
-    c  : 'color',
-    d  : 'display',
-    f  : 'float',
-    fd : 'flexDirection',
-    ff : 'fontFamily',
-    fs : 'fontSize',
-    h  : 'height',
-    jc : 'justifyContent',
-    l  : 'left',
-    lh : 'lineHeight',
-    ls : 'letterSpacing',
-    m  : 'margin',
-    mb : 'marginBottom',
-    ml : 'marginLeft',
-    mr : 'marginRight',
-    mt : 'marginTop',
-    o  : 'opacity',
-    p  : 'padding',
-    pb : 'paddingBottom',
-    pl : 'paddingLeft',
-    pr : 'paddingRight',
-    pt : 'paddingTop',
-    r  : 'right',
-    t  : 'top',
-    ta : 'textAlign',
-    td : 'textDecoration',
-    tt : 'textTransform',
-    w  : 'width'
-  };
-
-  var shorts = Object.create(null);
-
   var cssProperties = ['float'].concat(Object.keys(
     findWidth(document.documentElement.style)
   ).filter(function (p) { return p.indexOf('-') === -1 && p !== 'length'; }));
@@ -60,31 +22,6 @@
       : cache[item] = fn(item); };
   };
 
-  var stringToObject = memoize(function (string) {
-    var last = ''
-      , prev;
-
-    return string.trim().replace(/;/g, '\n').split('\n').reduce(function (acc, line) {
-      line = last + line.trim();
-      last = line.slice(-1) === ',' ? line : '';
-      if (last)
-        { return acc }
-
-      if (line.charAt(0) === ',') {
-        acc[prev] += line;
-        return acc
-      }
-
-      var tokens = line.split(/[:\s]/);
-      if (tokens.length > 1) {
-        var key = hyphenToCamelCase(tokens.shift().trim());
-        prev = shorts[key] || key;
-        add(acc, prev, tokens.filter(function (a) { return a; }).reduce(function (acc, t) { return acc + addPx(prev, t.trim()) + ' '; }, '').trim());
-      }
-      return acc
-    }, {})
-  });
-
   function add(style, prop, value) {
     if (!(prop in style))
       { return style[prop] = value }
@@ -99,22 +36,6 @@
   var vendorValuePrefix = Object.create(null, {});
 
   var vendorRegex = /^(o|O|ms|MS|Ms|moz|Moz|webkit|Webkit|WebKit)([A-Z])/;
-
-  function parse(input, value) {
-    var obj;
-
-    if (typeof input === 'string') {
-      if (typeof value === 'string' || typeof value === 'number')
-        { return (( obj = {}, obj[input] = value, obj )) }
-
-      return stringToObject(input)
-    } else if (Array.isArray(input) && Array.isArray(input.raw)) {
-      arguments[0] = { raw: input };
-      return stringToObject(String.raw.apply(null, arguments))
-    }
-
-    return input.style || sanitize(input)
-  }
 
   var appendPx = memoize(function (prop) {
     var el = document.createElement('div');
@@ -164,7 +85,7 @@
   }
 
   function hyphenToCamelCase(hyphen) {
-    return hyphen.slice(hyphen.charAt(0) === '-' ? 1 : 0).replace(/-([a-z])/g, function(match) {
+    return hyphen.slice(hyphen.charAt(0) === '-' && hyphen.charAt(1) !== '-' ? 1 : 0).replace(/-([a-z])/g, function(match) {
       return match[1].toUpperCase()
     })
   }
@@ -175,14 +96,6 @@
 
   function initials(camelCase) {
     return camelCase.charAt(0) + (camelCase.match(/([A-Z])/g) || []).join('').toLowerCase()
-  }
-
-  function short(prop) {
-    var acronym = initials(prop)
-        , short = popular[acronym] && popular[acronym] !== prop ? prop : acronym;
-
-    shorts[short] = prop;
-    return short
   }
 
   function objectToRules(style, suffix) {
@@ -205,15 +118,9 @@
     });
 
     if (Object.keys(base).length)
-      { rules.unshift(selectorBlock((suffix.charAt(0) === ' ' ? '' : '.$' ) + '.$' + suffix, base)); }
+      { rules.unshift((suffix.charAt(0) === ' ' ? '' : '.$' ) + '.$' + suffix + '{' + stylesToCss(base) + '}'); }
 
     return rules
-  }
-
-  function selectorBlock(selector, style) {
-    return selector + '{'
-      + stylesToCss((typeof style === 'string' ? stringToObject(style) : style))
-      + '}'
   }
 
   var selectorSplit = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
@@ -295,7 +202,7 @@
   var keyframeCache = {};
 
   function keyframes(props) {
-    var content = Object.keys(props).reduce(function (acc, key) { return acc + selectorBlock(key, props[key].style || props[key]); }
+    var content = Object.keys(props).reduce(function (acc, key) { return acc + key + '{' + props[key].style || props[key] + '}'; }
     , '');
 
     if (content in keyframeCache)
@@ -365,9 +272,48 @@
     '::grammar-error'
   ];
 
+  var popular = {
+    ai : 'alignItems',
+    b  : 'bottom',
+    bc : 'backgroundColor',
+    br : 'borderRadius',
+    bs : 'boxShadow',
+    c  : 'color',
+    d  : 'display',
+    f  : 'float',
+    fd : 'flexDirection',
+    ff : 'fontFamily',
+    fs : 'fontSize',
+    h  : 'height',
+    jc : 'justifyContent',
+    l  : 'left',
+    lh : 'lineHeight',
+    ls : 'letterSpacing',
+    m  : 'margin',
+    mb : 'marginBottom',
+    ml : 'marginLeft',
+    mr : 'marginRight',
+    mt : 'marginTop',
+    o  : 'opacity',
+    p  : 'padding',
+    pb : 'paddingBottom',
+    pl : 'paddingLeft',
+    pr : 'paddingRight',
+    pt : 'paddingTop',
+    r  : 'right',
+    t  : 'top',
+    ta : 'textAlign',
+    td : 'textDecoration',
+    tt : 'textTransform',
+    w  : 'width'
+  };
+
+  var shorts = Object.create(null);
+
   function bss(input, value) {
-    assign(bss.style, parse.apply(null, arguments));
-    return chain(bss)
+    var b = chain(bss);
+    assign(b.style, parse.apply(null, arguments));
+    return b
   }
 
   function setProp(prop, value) {
@@ -486,7 +432,7 @@
     if (arguments.length === 1)
       { return Object.keys(selector).forEach(function (key) { return css(key, selector[key]); }) }
 
-    insert(selectorBlock(selector, parse(style)), 0);
+    insert(selector + '{' + parse(style) + '}', 0);
   }
 
   function helper(name, styling) {
@@ -494,16 +440,18 @@
       { return Object.keys(name).forEach(function (key) { return helper(key, name[key]); }) }
 
     delete bss[name]; // Needed to avoid weird get calls in chrome
-    typeof styling === 'object'
-      ?
+
+    if (typeof styling === 'object') {
+      helper[name] = parse(styling);
       Object.defineProperty(bss, name, {
         configurable: true,
         get: function() {
           assign(this.style, parse(styling));
           return chain(this)
         }
-      })
-      :
+      });
+    } else {
+      helper[name] = styling;
       Object.defineProperty(bss, name, {
         configurable: true,
         value: function Helper() {
@@ -512,10 +460,67 @@
           return chain(this)
         }
       });
+    }
   }
 
   bss.helper('$animate', function (value, props) { return bss.animation(bss.$keyframes(props) + ' ' + value); }
   );
+
+  function short(prop) {
+    var acronym = initials(prop)
+        , short = popular[acronym] && popular[acronym] !== prop ? prop : acronym;
+
+    shorts[short] = prop;
+    return short
+  }
+
+  var stringToObject = memoize(function (string) {
+    var last = ''
+      , prev;
+
+    return string.trim().split(/;|\n/).reduce(function (acc, line) {
+      line = last + line.trim();
+      last = line.charAt(line.length - 1) === ',' ? line : '';
+      if (last)
+        { return acc }
+
+      if (line.charAt(0) === ',') {
+        acc[prev] += line;
+        return acc
+      }
+
+      var tokens = line.split(/[:\s]/)
+          , key = hyphenToCamelCase(tokens.shift().trim());
+
+      prev = shorts[key] || key;
+
+      if (key in helper) {
+        typeof helper[key] === 'function'
+          ? assign(acc, helper[key].apply(helper, tokens.filter(function (a) { return a; }).map(function (a) { return a.trim(); })).style)
+          : assign(acc, helper[key]);
+      } else if (tokens.length > 0) {
+        add(acc, prev, tokens.filter(function (a) { return a; }).reduce(function (acc, t) { return acc + addPx(prev, t.trim()) + ' '; }, '').trim());
+      }
+
+      return acc
+    }, {})
+  });
+
+  function parse(input, value) {
+    var obj;
+
+    if (typeof input === 'string') {
+      if (typeof value === 'string' || typeof value === 'number')
+        { return (( obj = {}, obj[input] = value, obj )) }
+
+      return stringToObject(input)
+    } else if (Array.isArray(input) && Array.isArray(input.raw)) {
+      arguments[0] = { raw: input };
+      return stringToObject(String.raw.apply(null, arguments))
+    }
+
+    return input.style || sanitize(input)
+  }
 
   return bss;
 
