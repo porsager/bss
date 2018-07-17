@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## 1.2.2 -
+Fix `b.css` regression
+Fix `b.$keyframes` and `b.$animate` 
+
 ## 1.2.1 -
 Support helpers in strings
 Fix support for css variables

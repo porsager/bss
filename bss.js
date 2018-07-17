@@ -4,6 +4,99 @@
   (global.b = factory());
 }(this, (function () { 'use strict';
 
+  var pseudos = [
+    ':active',
+    ':any',
+    ':checked',
+    ':default',
+    ':disabled',
+    ':empty',
+    ':enabled',
+    ':first',
+    ':first-child',
+    ':first-of-type',
+    ':fullscreen',
+    ':focus',
+    ':hover',
+    ':indeterminate',
+    ':in-range',
+    ':invalid',
+    ':last-child',
+    ':last-of-type',
+    ':left',
+    ':link',
+    ':only-child',
+    ':only-of-type',
+    ':optional',
+    ':out-of-range',
+    ':read-only',
+    ':read-write',
+    ':required',
+    ':right',
+    ':root',
+    ':scope',
+    ':target',
+    ':valid',
+    ':visited',
+
+    // With value
+    ':dir',
+    ':lang',
+    ':not',
+    ':nth-child',
+    ':nth-last-child',
+    ':nth-last-of-type',
+    ':nth-of-type',
+
+    // Elements
+    '::after',
+    '::before',
+    '::first-letter',
+    '::first-line',
+    '::selection',
+    '::backdrop',
+    '::placeholder',
+    '::marker',
+    '::spelling-error',
+    '::grammar-error'
+  ];
+
+  var popular = {
+    ai : 'alignItems',
+    b  : 'bottom',
+    bc : 'backgroundColor',
+    br : 'borderRadius',
+    bs : 'boxShadow',
+    c  : 'color',
+    d  : 'display',
+    f  : 'float',
+    fd : 'flexDirection',
+    ff : 'fontFamily',
+    fs : 'fontSize',
+    h  : 'height',
+    jc : 'justifyContent',
+    l  : 'left',
+    lh : 'lineHeight',
+    ls : 'letterSpacing',
+    m  : 'margin',
+    mb : 'marginBottom',
+    ml : 'marginLeft',
+    mr : 'marginRight',
+    mt : 'marginTop',
+    o  : 'opacity',
+    p  : 'padding',
+    pb : 'paddingBottom',
+    pl : 'paddingLeft',
+    pr : 'paddingRight',
+    pt : 'paddingTop',
+    r  : 'right',
+    t  : 'top',
+    ta : 'textAlign',
+    td : 'textDecoration',
+    tt : 'textTransform',
+    w  : 'width'
+  };
+
   var cssProperties = ['float'].concat(Object.keys(
     findWidth(document.documentElement.style)
   ).filter(function (p) { return p.indexOf('-') === -1 && p !== 'length'; }));
@@ -166,6 +259,7 @@
     var content = rules.join('');
     rules = [];
     classes = Object.create(null, {});
+    count = 0;
     return content
   }
 
@@ -197,116 +291,6 @@
 
     return className
   }
-
-  var count$1 = 0;
-  var keyframeCache = {};
-
-  function keyframes(props) {
-    var content = Object.keys(props).reduce(function (acc, key) { return acc + key + '{' + props[key].style || props[key] + '}'; }
-    , '');
-
-    if (content in keyframeCache)
-      { return keyframeCache[content] }
-
-    var name = classPrefix + ++count$1;
-    keyframeCache[content] = name;
-    insert('@keyframes ' + name + '{' + content + '}');
-
-    return name
-  }
-
-  var pseudos = [
-    ':active',
-    ':any',
-    ':checked',
-    ':default',
-    ':disabled',
-    ':empty',
-    ':enabled',
-    ':first',
-    ':first-child',
-    ':first-of-type',
-    ':fullscreen',
-    ':focus',
-    ':hover',
-    ':indeterminate',
-    ':in-range',
-    ':invalid',
-    ':last-child',
-    ':last-of-type',
-    ':left',
-    ':link',
-    ':only-child',
-    ':only-of-type',
-    ':optional',
-    ':out-of-range',
-    ':read-only',
-    ':read-write',
-    ':required',
-    ':right',
-    ':root',
-    ':scope',
-    ':target',
-    ':valid',
-    ':visited',
-
-    // With value
-    ':dir',
-    ':lang',
-    ':not',
-    ':nth-child',
-    ':nth-last-child',
-    ':nth-last-of-type',
-    ':nth-of-type',
-
-    // Elements
-    '::after',
-    '::before',
-    '::first-letter',
-    '::first-line',
-    '::selection',
-    '::backdrop',
-    '::placeholder',
-    '::marker',
-    '::spelling-error',
-    '::grammar-error'
-  ];
-
-  var popular = {
-    ai : 'alignItems',
-    b  : 'bottom',
-    bc : 'backgroundColor',
-    br : 'borderRadius',
-    bs : 'boxShadow',
-    c  : 'color',
-    d  : 'display',
-    f  : 'float',
-    fd : 'flexDirection',
-    ff : 'fontFamily',
-    fs : 'fontSize',
-    h  : 'height',
-    jc : 'justifyContent',
-    l  : 'left',
-    lh : 'lineHeight',
-    ls : 'letterSpacing',
-    m  : 'margin',
-    mb : 'marginBottom',
-    ml : 'marginLeft',
-    mr : 'marginRight',
-    mt : 'marginTop',
-    o  : 'opacity',
-    p  : 'padding',
-    pb : 'paddingBottom',
-    pl : 'paddingLeft',
-    pr : 'paddingRight',
-    pt : 'paddingTop',
-    r  : 'right',
-    t  : 'top',
-    ta : 'textAlign',
-    td : 'textDecoration',
-    tt : 'textTransform',
-    w  : 'width'
-  };
 
   var shorts = Object.create(null);
 
@@ -432,7 +416,7 @@
     if (arguments.length === 1)
       { return Object.keys(selector).forEach(function (key) { return css(key, selector[key]); }) }
 
-    insert(selector + '{' + parse(style) + '}', 0);
+    insert(selector + '{' + stylesToCss(parse(style)) + '}', 0);
   }
 
   function helper(name, styling) {
@@ -505,6 +489,23 @@
       return acc
     }, {})
   });
+
+  var count$1 = 0;
+  var keyframeCache = {};
+
+  function keyframes(props) {
+    var content = Object.keys(props).reduce(function (acc, key) { return acc + key + '{' + stylesToCss(parse(props[key])) + '}'; }
+    , '');
+
+    if (content in keyframeCache)
+      { return keyframeCache[content] }
+
+    var name = classPrefix + count$1++;
+    keyframeCache[content] = name;
+    insert('@keyframes ' + name + '{' + content + '}');
+
+    return name
+  }
 
   function parse(input, value) {
     var obj;
