@@ -6,7 +6,7 @@
   "module": "lib/index.js",
   "scripts": {
     "test": "TEST=true npm run build && ospec",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "build": "rollup -c"
   },
   "author": "Rasmus Porsager <rasmus@porsager.com>",
