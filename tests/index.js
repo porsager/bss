@@ -176,6 +176,11 @@ o.spec('bss', function() {
     })
   })
 
+  o('$css', function() {
+    b.css('html', 'background blue')
+    o(b.getSheet()).equals('html{background:blue;}')
+  })
+
   o('Override valueOf', function() {
     const newValueOf = function() {
       return 'test'
