@@ -28,6 +28,7 @@ global.document = {
   },
   documentElement: {
     style: {
+      animation: '',
       display: '',
       backgroundColor: '',
       content: '',
@@ -179,6 +180,22 @@ o.spec('bss', function() {
   o('$css', function() {
     b.css('html', 'background blue')
     o(b.getSheet()).equals('html{background:blue;}')
+  })
+
+  o('$keyframes', function() {
+    const anim = b.$keyframes({
+      from: 'bc red'
+    })
+    o(b.getSheet()).equals(`@keyframes ${anim}{from{background-color:red;}}`)
+  })
+
+  o('$animate', function() {
+    const cls = b.$animate('1s', {
+      from: 'bc black'
+    }).class
+    const sheet = b.getSheet()
+    console.log(cls, sheet)
+    o(sheet).equals(`@keyframes ${cls}{from{background-color:black;}}.${cls}.${cls}{animation:${cls} 1s;}`)
   })
 
   o('Override valueOf', function() {
