@@ -106,8 +106,8 @@ o.spec('bss', function() {
   })
 
   o('allows css variables', function() {
-    const cls = b('--primaryColor white').class
-    o(b.getSheet()).equals(`.${cls}.${cls}{--primaryColor:white;}`)
+    const cls = b('--primaryColor 250 250 250').class
+    o(b.getSheet()).equals(`.${cls}.${cls}{--primaryColor:250 250 250;}`)
   })
 
   o('single class for less specificity when using $nest', function() {
