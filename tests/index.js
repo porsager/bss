@@ -106,8 +106,8 @@ o.spec('bss', function() {
   })
 
   o('allows css variables', function() {
-    const cls = b('--primary white').class
-    o(b.getSheet()).equals(`.${cls}.${cls}{--primary:white;}`)
+    const cls = b('--primaryColor white').class
+    o(b.getSheet()).equals(`.${cls}.${cls}{--primaryColor:white;}`)
   })
 
   o('single class for less specificity when using $nest', function() {
@@ -194,7 +194,6 @@ o.spec('bss', function() {
       from: 'bc black'
     }).class
     const sheet = b.getSheet()
-    console.log(cls, sheet)
     o(sheet).equals(`@keyframes ${cls}{from{background-color:black;}}.${cls}.${cls}{animation:${cls} 1s;}`)
   })
 
