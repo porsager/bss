@@ -33,7 +33,8 @@ global.document = {
       backgroundColor: '',
       content: '',
       width: '0',
-      padding: ''
+      padding: '',
+      boxShadow: ''
     }
   }
 }
@@ -124,6 +125,8 @@ o.spec('bss', function() {
     o(b`w 1`.style).deepEquals({ width: '1px' })
     o(b('width 1').style).deepEquals({ width: '1px' })
     o(b({ width: 1 }).style).deepEquals({ width: '1px' })
+    o(b`boxShadow 1 1 10 black`.style).deepEquals({ boxShadow: '1px 1px 10px black' })
+    o(b`border 1 solid black`.style).deepEquals({ border: '1px solid black' })
     o(b.w(1).style).deepEquals({ width: '1px' })
   })
 
