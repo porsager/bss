@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## 1.2.3 -
+Add `b.$import` for `@import` support
+Fix uppercase letter support for css variables
+
 ## 1.2.2 -
 Fix `b.css` regression
 Fix `b.$keyframes` and `b.$animate` 

@@ -178,7 +178,7 @@
   }
 
   function hyphenToCamelCase(hyphen) {
-    return hyphen.slice(hyphen.charAt(0) === '-' && hyphen.charAt(1) !== '-' ? 1 : 0).replace(/-([a-z])/g, function(match) {
+    return hyphen.slice(hyphen.charAt(0) === '-' ? 1 : 0).replace(/-([a-z])/g, function(match) {
       return match[1].toUpperCase()
     })
   }
@@ -225,7 +225,13 @@
 
   function propToString(prop, value) {
     return (vendorRegex.test(prop) ? '-' : '')
-    + camelCaseToHyphen(prop) + ':' + value + ';'
+      + (prop.charAt(0) === '-' && prop.charAt(1) === '-'
+        ? prop
+        : camelCaseToHyphen(prop)
+      )
+      + ':'
+      + value
+      + ';'
   }
 
   function formatValue(key, value) {
@@ -320,6 +326,9 @@
   setProp('setDebug', setDebug);
 
   setProp('$keyframes', keyframes);
+  setProp('$media', $media);
+  setProp('$import', $import);
+  setProp('$nest', $nest);
   setProp('getSheet', getSheet);
   setProp('helper', helper);
   setProp('css', css);
@@ -372,14 +381,21 @@
     }
   });
 
-  setProp('$media', function Media(value, style) {
+  function $media(value, style) {
     if (value)
       { add(this.style, '@media ' + value, parse(style)); }
 
     return chain(this)
-  });
+  }
 
-  setProp('$nest', function Nest(value, style) {
+  function $import(value) {
+    if (value)
+      { insert('@import ' + value + ';', 0); }
+
+    return chain(this)
+  }
+
+  function $nest(value, style) {
     var this$1 = this;
 
     if (arguments.length === 1)
@@ -388,7 +404,7 @@
       { value.split(selectorSplit).map(function (x) { return x.trim(); }).forEach(function (x) { return add(this$1.style, (x.charAt(0) === ':' ? '' : ' ') + x, parse(style)); }); }
 
     return chain(this)
-  });
+  }
 
   pseudos.forEach(function (name) { return setProp('$' + hyphenToCamelCase(name.replace(/:/g, '')), function Pseudo(value, b) {
       if (value || b)
@@ -473,17 +489,24 @@
         return acc
       }
 
-      var tokens = line.split(/[:\s]/)
-          , key = hyphenToCamelCase(tokens.shift().trim());
+      var tokens = line.match(/[^:\s]+/g);
 
-      prev = shorts[key] || key;
+      if (!tokens)
+        { return acc }
 
-      if (key in helper) {
-        typeof helper[key] === 'function'
-          ? assign(acc, helper[key].apply(helper, tokens.filter(function (a) { return a; }).map(function (a) { return a.trim(); })).style)
-          : assign(acc, helper[key]);
+      var key = tokens.shift()
+          , prop = key.charAt(0) === '-' && key.charAt(1) === '-'
+            ? key
+            : hyphenToCamelCase(key);
+
+      prev = shorts[prop] || prop;
+
+      if (prop in helper) {
+        typeof helper[prop] === 'function'
+          ? assign(acc, helper[prop].apply(helper, tokens).style)
+          : assign(acc, helper[prop]);
       } else if (tokens.length > 0) {
-        add(acc, prev, tokens.filter(function (a) { return a; }).reduce(function (acc, t) { return acc + addPx(prev, t.trim()) + ' '; }, '').trim());
+        add(acc, prev, tokens.reduce(function (acc, t) { return acc + addPx(prev, t) + ' '; }, '').trim());
       }
 
       return acc
