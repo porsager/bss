@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## 1.2.4 -
+Fix support for passing full bss objects to `b.css()`
+Fix camel-case css variables issue
+Fix auto adding px to border and box-shadow shorthand
+
 ## 1.2.3 -
 Add `b.$import` for `@import` support
 Fix uppercase letter support for css variables
