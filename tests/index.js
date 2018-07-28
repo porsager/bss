@@ -121,6 +121,11 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`.${cls} th{background:blue;}.${cls} tr{background:blue;}`)
   })
 
+  o('nest objects', function() {
+    const cls = b.$nest({ th : b('background blue') }).class
+    o(b.getSheet()).equals(`.${cls} th{background:blue;}`)
+  })
+
   o('add px', function() {
     o(b`w 1`.style).deepEquals({ width: '1px' })
     o(b('width 1').style).deepEquals({ width: '1px' })
