@@ -69,10 +69,6 @@ o.spec('bss', function() {
     o(b.backgroundColor('red').style).deepEquals({ backgroundColor: 'red' })
   })
 
-  o('recursive nest', function() {
-
-  })
-
   o('css doulbe class for specificity generation', function() {
     const cls = b`foo: bar;`.class
     o(b.getSheet()).equals(`.${cls}.${cls}{foo:bar;}`)
@@ -185,9 +181,19 @@ o.spec('bss', function() {
     })
   })
 
-  o('$css', function() {
+  o('css', function() {
     b.css('html', 'background blue')
     o(b.getSheet()).equals('html{background:blue;}')
+  })
+
+  o('css objects', function() {
+    b.css({ html: 'background blue' })
+    o(b.getSheet()).equals('html{background:blue;}')
+  })
+
+  o('css nest', function() {
+    b.css('html', b('background blue').$nest('li', 'background red'))
+    o(b.getSheet()).equals('html{background:blue;}html li{background:red;}')
   })
 
   o('$keyframes', function() {
