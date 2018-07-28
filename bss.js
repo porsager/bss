@@ -141,7 +141,9 @@
       return ''
     }
   }, {
-    flex: ''
+    flex: '',
+    boxShadow: 'px',
+    border: 'px'
   });
 
   function lowercaseFirst(string) {
@@ -298,6 +300,8 @@
     return className
   }
 
+  /* eslint no-invalid-this: 0 */
+
   var shorts = Object.create(null);
 
   function bss(input, value) {
@@ -395,15 +399,20 @@
     return chain(this)
   }
 
-  function $nest(value, style) {
+  function $nest(selector, properties) {
     var this$1 = this;
 
     if (arguments.length === 1)
-      { Object.keys(value).forEach(function (x) { return this$1.$nest(x, value[x]); }); }
-    else if (value)
-      { value.split(selectorSplit).map(function (x) { return x.trim(); }).forEach(function (x) { return add(this$1.style, (x.charAt(0) === ':' ? '' : ' ') + x, parse(style)); }); }
+      { Object.keys(selector).forEach(function (x) { return addNest(this$1.style, x, selector[x]); }); }
+    else if (selector)
+      { addNest(this.style, selector, properties); }
 
     return chain(this)
+  }
+
+  function addNest(style, selector, properties) {
+    selector.split(selectorSplit).map(function (x) { return x.trim(); }).forEach(function (x) { return add(style, (x.charAt(0) === ':' ? '' : ' ') + x, parse(properties)); }
+    );
   }
 
   pseudos.forEach(function (name) { return setProp('$' + hyphenToCamelCase(name.replace(/:/g, '')), function Pseudo(value, b) {
@@ -430,9 +439,15 @@
 
   function css(selector, style) {
     if (arguments.length === 1)
-      { return Object.keys(selector).forEach(function (key) { return css(key, selector[key]); }) }
+      { Object.keys(selector).forEach(function (key) { return addCss(key, selector[key]); }); }
+    else
+      { addCss(selector, style); }
 
-    insert(selector + '{' + stylesToCss(parse(style)) + '}', 0);
+    return chain(this)
+  }
+
+  function addCss(selector, style) {
+    objectToRules(parse(style)).forEach(function (c) { return insert(c.replace(/\.\$\.?\$?/g, selector)); });
   }
 
   function helper(name, styling) {
@@ -495,7 +510,8 @@
         { return acc }
 
       var key = tokens.shift()
-          , prop = key.charAt(0) === '-' && key.charAt(1) === '-'
+          , cssVar = key.charAt(0) === '-' && key.charAt(1) === '-'
+          , prop = cssVar
             ? key
             : hyphenToCamelCase(key);
 
@@ -506,7 +522,7 @@
           ? assign(acc, helper[prop].apply(helper, tokens).style)
           : assign(acc, helper[prop]);
       } else if (tokens.length > 0) {
-        add(acc, prev, tokens.reduce(function (acc, t) { return acc + addPx(prev, t) + ' '; }, '').trim());
+        add(acc, prev, tokens.map(function (t) { return cssVar ? t : addPx(prev, t); }).join(' '));
       }
 
       return acc
