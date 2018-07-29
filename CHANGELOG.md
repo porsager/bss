@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## 1.2.5 -
+Support strings directly for helpers
+
 ## 1.2.4 -
 Fix support for passing full bss objects to `b.css()`
 Fix camel-case css variables issue
