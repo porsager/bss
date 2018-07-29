@@ -145,6 +145,11 @@ o.spec('bss', function() {
       o(b.foobar.style).deepEquals({ foo: 'bar' })
     })
 
+    o('parsed', function() {
+      b.helper('foobar', `foo bar`)
+      o(b.foobar.style).deepEquals({ foo: 'bar' })
+    })
+
     o('with args (object notation)', function() {
       b.helper('foo', arg => b({ foo: arg }))
       o(b.foo('bar').style).deepEquals({ foo: 'bar' })
