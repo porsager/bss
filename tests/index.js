@@ -74,6 +74,13 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`.${cls}.${cls}{foo:bar;}`)
   })
 
+  o('values can have colons', function() {
+    const cls = b`
+      backgroundImage: url(https://bss.com/)
+    `.class
+    o(b.getSheet()).equals(`.${cls}.${cls}{background-image:url(https://bss.com/);}`)
+  })
+
   o('pseudo', function() {
     const cls = b.$hover(b.bc('green')).class
     o(b.getSheet()).equals(`.${cls}.${cls}:hover{background-color:green;}`)
