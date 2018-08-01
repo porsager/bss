@@ -504,13 +504,14 @@
         return acc
       }
 
-      var tokens = line.match(/[^:\s]+/g);
+      var ref = line.replace(/[ :]+/, ' ').split(' ');
+      var key = ref[0];
+      var tokens = ref.slice(1);
 
-      if (!tokens)
+      if (!key)
         { return acc }
 
-      var key = tokens.shift()
-          , cssVar = key.charAt(0) === '-' && key.charAt(1) === '-'
+      var cssVar = key.charAt(0) === '-' && key.charAt(1) === '-'
           , prop = cssVar
             ? key
             : hyphenToCamelCase(key);

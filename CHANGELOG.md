@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## 1.2.6 -
+Fix colons being removed from values
+
 ## 1.2.5 -
 Support strings directly for helpers
 
