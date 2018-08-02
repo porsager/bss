@@ -48,6 +48,15 @@ global.window = {
 const b = require('../bss')
 
 o.spec('bss', function() {
+
+  o('only className is enumerable', function() {
+    o(Object.keys(b.bc('red'))).deepEquals(['className'])
+  })
+
+  o('style property contains only styles', function() {
+    o(b.bc('red').$hover(b.bc('blue')).style).deepEquals({ backgroundColor: 'red' })
+  })
+
   o('inputs', function() {
     o(b`foo: bar; baz: boo;`.style).deepEquals({ foo: 'bar', baz: 'boo' })
     o(b`foo: bar;`.style).deepEquals({ foo: 'bar' })
@@ -56,6 +65,7 @@ o.spec('bss', function() {
     o(b({ foo: 'bar' }).style).deepEquals({ foo: 'bar' })
     o(b('foo', 'bar').style).deepEquals({ foo: 'bar' })
   })
+
 
   o('multiline input', function() {
     o(b('transform scale(1)\n,rotate(0)').style).deepEquals({ transform: 'scale(1),rotate(0)' })
@@ -70,19 +80,19 @@ o.spec('bss', function() {
   })
 
   o('css doulbe class for specificity generation', function() {
-    const cls = b`foo: bar;`.class
+    const cls = b`foo: bar;`.className
     o(b.getSheet()).equals(`.${cls}.${cls}{foo:bar;}`)
   })
 
   o('values can have colons', function() {
     const cls = b`
       backgroundImage: url(https://bss.com/)
-    `.class
+    `.className
     o(b.getSheet()).equals(`.${cls}.${cls}{background-image:url(https://bss.com/);}`)
   })
 
   o('pseudo', function() {
-    const cls = b.$hover(b.bc('green')).class
+    const cls = b.$hover(b.bc('green')).className
     o(b.getSheet()).equals(`.${cls}.${cls}:hover{background-color:green;}`)
   })
 
@@ -90,37 +100,37 @@ o.spec('bss', function() {
     const cls = b`
       display -webkit-flex
       display flex
-    `.class
+    `.className
     o(b.getSheet()).equals(`.${cls}.${cls}{display:-webkit-flex;display:flex;}`)
   })
 
   o('same named properties function', function() {
-    const cls = b.d('-webkit-flex').d('flex').class
+    const cls = b.d('-webkit-flex').d('flex').className
     o(b.getSheet()).equals(`.${cls}.${cls}{display:-webkit-flex;display:flex;}`)
   })
 
   o('allows vendor prefix', function() {
-    const cls = b('-webkit-overflow-scrolling touch').class
+    const cls = b('-webkit-overflow-scrolling touch').className
     o(b.getSheet()).equals(`.${cls}.${cls}{-webkit-overflow-scrolling:touch;}`)
   })
 
   o('allows css variables', function() {
-    const cls = b('--primaryColor 250 250 250').class
+    const cls = b('--primaryColor 250 250 250').className
     o(b.getSheet()).equals(`.${cls}.${cls}{--primaryColor:250 250 250;}`)
   })
 
   o('single class for less specificity when using $nest', function() {
-    const cls = b.$nest('li', b('-webkit-overflow-scrolling touch')).class
+    const cls = b.$nest('li', b('-webkit-overflow-scrolling touch')).className
     o(b.getSheet()).equals(`.${cls} li{-webkit-overflow-scrolling:touch;}`)
   })
 
   o('nest multiple selectors', function() {
-    const cls = b.$nest('th, tr', b('background blue')).class
+    const cls = b.$nest('th, tr', b('background blue')).className
     o(b.getSheet()).equals(`.${cls} th{background:blue;}.${cls} tr{background:blue;}`)
   })
 
   o('nest objects', function() {
-    const cls = b.$nest({ th : b('background blue') }).class
+    const cls = b.$nest({ th : b('background blue') }).className
     o(b.getSheet()).equals(`.${cls} th{background:blue;}`)
   })
 
@@ -213,7 +223,7 @@ o.spec('bss', function() {
   o('$animate', function() {
     const cls = b.$animate('1s', {
       from: 'bc black'
-    }).class
+    }).className
     const sheet = b.getSheet()
     o(sheet).equals(`@keyframes ${cls}{from{background-color:black;}}.${cls}.${cls}{animation:${cls} 1s;}`)
   })

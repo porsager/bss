@@ -1,6 +1,7 @@
 ## [Unreleased]
 Breaking Change: Removed auto-quote-wrapping of `content` values
 Breaking Change: Don't auto add px to `line-height` values
+Breaking Change: BSS instances will now have `className` as only enumerable property for better integration with object destructuring (eg. JSX usage).
 
 ## 1.2.6 -
 Fix colons being removed from values
