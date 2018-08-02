@@ -99,11 +99,6 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`.${cls}.${cls}{display:-webkit-flex;display:flex;}`)
   })
 
-  o('empty content string is set to ""', function() {
-    const cls = b.$before(b.content('')).$after(b({ content: '' })).class
-    o(b.getSheet()).equals(`.${cls}.${cls}::before{content:"";}.${cls}.${cls}::after{content:"";}`)
-  })
-
   o('allows vendor prefix', function() {
     const cls = b('-webkit-overflow-scrolling touch').class
     o(b.getSheet()).equals(`.${cls}.${cls}{-webkit-overflow-scrolling:touch;}`)

@@ -1,4 +1,5 @@
 ## [Unreleased]
+Breaking Change: Removed auto-quote-wrapping of `content` values
 
 ## 1.2.6 -
 Fix colons being removed from values
