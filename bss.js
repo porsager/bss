@@ -411,7 +411,7 @@
   }
 
   function addNest(style, selector, properties) {
-    selector.split(selectorSplit).map(function (x) { return x.trim(); }).forEach(function (x) { return add(style, (x.charAt(0) === ':' ? '' : ' ') + x, parse(properties)); }
+    selector.split(selectorSplit).map(function (x) { return x.trim(); }).forEach(function (x) { return add(style, (x.charAt(0) === ':' || x.charAt(0) === '[' ? '' : ' ') + x, parse(properties)); }
     );
   }
 
