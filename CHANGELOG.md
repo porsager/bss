@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## 1.2.7 -
+Fix attribute selector usage in `$nest`
+
 ## 1.2.6 -
 Fix colons being removed from values
 
