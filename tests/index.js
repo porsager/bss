@@ -121,7 +121,7 @@ o.spec('bss', function() {
 
   o('nest multiple selectors', function() {
     const cls = b.$nest('th, tr', b('background blue')).class
-    o(b.getSheet()).equals(`.${cls} th{background:blue;}.${cls} tr{background:blue;}`)
+    o(b.getSheet()).equals(`.${cls} th,.${cls} tr{background:blue;}`)
   })
 
   o('nest objects', function() {
