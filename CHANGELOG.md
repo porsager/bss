@@ -1,5 +1,6 @@
 ## [Unreleased]
 Breaking Change: Removed auto-quote-wrapping of `content` values
+Breaking Change: Don't auto add px to `line-height` values
 
 ## 1.2.6 -
 Fix colons being removed from values
