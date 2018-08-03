@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## 1.2.8 -
+Remove String.raw requirement
+Group multiple selectors in $nest
+
 ## 1.2.7 -
 Fix attribute selector usage in `$nest`
 

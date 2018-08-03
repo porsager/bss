@@ -411,7 +411,13 @@
   }
 
   function addNest(style, selector, properties) {
-    selector.split(selectorSplit).map(function (x) { return x.trim(); }).forEach(function (x) { return add(style, (x.charAt(0) === ':' || x.charAt(0) === '[' ? '' : ' ') + x, parse(properties)); }
+    add(
+      style,
+      selector.split(selectorSplit).map(function (x) {
+        x = x.trim();
+        return (x.charAt(0) === ':' || x.charAt(0) === '[' ? '' : ' ') + x
+      }).join(',.$'),
+      parse(properties)
     );
   }
 
@@ -548,6 +554,7 @@
   }
 
   function parse(input, value) {
+    var arguments$1 = arguments;
     var obj;
 
     if (typeof input === 'string') {
@@ -555,9 +562,11 @@
         { return (( obj = {}, obj[input] = value, obj )) }
 
       return stringToObject(input)
-    } else if (Array.isArray(input) && Array.isArray(input.raw)) {
-      arguments[0] = { raw: input };
-      return stringToObject(String.raw.apply(null, arguments))
+    } else if (Array.isArray(input) && typeof input[0] === 'string') {
+      var str = '';
+      for (var i = 0; i < input.length; i++)
+        { str += input[i] + (arguments$1[i + 1] || ''); }
+      return stringToObject(str)
     }
 
     return input.style || sanitize(input)
