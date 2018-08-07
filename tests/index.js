@@ -75,6 +75,14 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`.${cls}.${cls}{foo:bar;}`)
   })
 
+  o('common style class reuse', function() {
+    const cls = b`foo: bar;`.class
+        , cls2 = b`foo: bar;`.class
+
+    o(cls).equals(cls2)
+    o(b.getSheet()).equals(`.${cls}.${cls}{foo:bar;}`)
+  })
+
   o('values can have colons', function() {
     const cls = b`
       backgroundImage: url(https://bss.com/)
