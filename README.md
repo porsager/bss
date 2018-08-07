@@ -289,6 +289,16 @@ b.css('html', b.boxSizing('border-box'))
 b.css('*, *:before, *:after', b.boxSizing('inherit'))
 ```
 
+## `.setDebug`
+
+Since chrome dev tools doesn't allow changing styles applied using CSSOM you can activate debugging mode which doesn't apply the styles using CSSOM.
+
+```
+b.setDebug(true)
+```
+
+The only caveat here is that animations and applied styles can result in small quicks like blinking fonts and styles.
+
 ## Browser support
 `bss` is tested and works in ie9+ and the other major browsers.
 > TODO - Create browser support table
