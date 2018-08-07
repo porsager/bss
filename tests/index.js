@@ -116,6 +116,10 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`.${cls}.${cls}{display:-webkit-flex;display:flex;}`)
   })
 
+  o('same named properties style', function() {
+    o(b.d('-webkit-flex').d('flex').style).deepEquals({display:'flex'})
+  })
+
   o('empty content string is set to ""', function() {
     const cls = b.$before(b.content('')).$after(b({ content: '' })).class
     o(b.getSheet()).equals(`.${cls}.${cls}::before{content:"";}.${cls}.${cls}::after{content:"";}`)
