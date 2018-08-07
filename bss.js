@@ -116,13 +116,10 @@
   };
 
   function add(style, prop, value) {
-    if (!(prop in style))
-      { return style[prop] = value }
-
-    if (!style._fallback)
-      { Object.defineProperty(style, '_fallback', { configurable: true, value: Object.create(null, {}) }); }
-
-    add(style._fallback, prop, value);
+    if (prop in style)
+      { add(style, '!' + prop, value); }
+    else
+      { style[prop] = value; }
   }
 
   var vendorMap = Object.create(null, {});
@@ -167,12 +164,6 @@
   }
 
   function assign(obj, obj2) {
-    if (obj2._fallback) {
-      obj._fallback
-        ? assign(obj._fallback, obj2._fallback)
-        : Object.defineProperty(obj, '_fallback', { value: obj2._fallback });
-    }
-
     for (var key in obj2) {
       if (obj2.hasOwnProperty(key))
         { obj[key] = obj2[key]; }
@@ -193,27 +184,28 @@
     return camelCase.charAt(0) + (camelCase.match(/([A-Z])/g) || []).join('').toLowerCase()
   }
 
-  function objectToRules(style, suffix) {
+  function objectToRules(style, selector, suffix, single) {
     if ( suffix === void 0 ) suffix = '';
 
     var base = {};
 
     var rules = [];
 
-    if (style._fallback)
-      { Object.defineProperty(base, '_fallback', { configurable: true, value: style._fallback }); }
-
     Object.keys(style).forEach(function (prop) {
       if (prop.charAt(0) === '@')
-        { rules.push(prop + '{' + objectToRules(style[prop]) + '}'); }
+        { rules.push(prop + '{' + objectToRules(style[prop], selector, suffix, single) + '}'); }
       else if (typeof style[prop] === 'object')
-        { rules = rules.concat(objectToRules(style[prop], suffix + prop)); }
+        { rules = rules.concat(objectToRules(style[prop], selector, suffix + prop, single)); }
       else
         { base[prop] = style[prop]; }
     });
 
-    if (Object.keys(base).length)
-      { rules.unshift((suffix.charAt(0) === ' ' ? '' : '.$' ) + '.$' + suffix + '{' + stylesToCss(base) + '}'); }
+    if (Object.keys(base).length) {
+      rules.unshift(
+        ((single || (suffix.charAt(0) === ' ') ? '' : '&') + '&' + suffix).replace(/&/g, selector) +
+        '{' + stylesToCss(base) + '}'
+      );
+    }
 
     return rules
   }
@@ -221,8 +213,8 @@
   var selectorSplit = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
 
   function stylesToCss(style) {
-    return Object.keys(style).reduce(function (acc, prop) { return acc + propToString(prop, style[prop]); }
-    , '') + (style._fallback ? stylesToCss(style._fallback) : '')
+    return Object.keys(style).reduce(function (acc, prop) { return acc + propToString(prop.replace(/!/g, ''), style[prop]); }
+    , '')
   }
 
   function propToString(prop, value) {
@@ -289,11 +281,11 @@
     if (json in classes)
       { return classes[json] }
 
-    var rules = objectToRules(style)
-        , className = classPrefix + (++count);
+    var className = classPrefix + (++count)
+        , rules = objectToRules(style, '.' + className);
 
     for (var i = 0; i < rules.length; i++)
-      { insert(rules[i].replace(/\.\$/g, '.' + className)); }
+      { insert(rules[i]); }
 
     classes[json] = className;
 
@@ -306,7 +298,7 @@
 
   function bss(input, value) {
     var b = chain(bss);
-    assign(b.style, parse.apply(null, arguments));
+    assign(b.__style, parse.apply(null, arguments));
     return b
   }
 
@@ -317,15 +309,20 @@
     });
   }
 
-  Object.defineProperty(bss, 'valueOf', {
-    configurable: true,
-    writable: true,
-    value: function ValueOf() {
-      return '.' + this.class
+  Object.defineProperties(bss, {
+    __style: {
+      configurable: true,
+      writable: true,
+      value: {}
+    },
+    valueOf: {
+      configurable: true,
+      writable: true,
+      value: function ValueOf() {
+        return '.' + this.class
+      }
     }
   });
-
-  bss.style = {};
 
   setProp('setDebug', setDebug);
 
@@ -340,14 +337,25 @@
 
   function chain(instance) {
     var newInstance = Object.create(bss, {
+      __style: {
+        value: instance.__style
+      },
       style: {
-        value: instance.style,
-        enumerable: true
+        enumerable: true,
+        get: function() {
+          var this$1 = this;
+
+          return Object.keys(this.__style).reduce(function (acc, key) {
+            if (typeof this$1.__style[key] === 'number' || typeof this$1.__style[key] === 'string')
+              { acc[key.replace(/^!/, '')] = this$1.__style[key]; }
+            return acc
+          }, {})
+        }
       }
     });
 
     if (instance === bss)
-      { bss.style = {}; }
+      { bss.__style = {}; }
 
     return newInstance
   }
@@ -372,7 +380,7 @@
   });
 
   setProp('content', function Content(arg) {
-    this.style.content = '"' + arg + '"';
+    this.__style.content = '"' + arg + '"';
     return chain(this)
   });
 
@@ -381,13 +389,13 @@
       this.__class = value;
     },
     get: function() {
-      return this.__class || createClass(this.style)
+      return this.__class || createClass(this.__style)
     }
   });
 
   function $media(value, style) {
     if (value)
-      { add(this.style, '@media ' + value, parse(style)); }
+      { add(this.__style, '@media ' + value, parse(style)); }
 
     return chain(this)
   }
@@ -403,9 +411,9 @@
     var this$1 = this;
 
     if (arguments.length === 1)
-      { Object.keys(selector).forEach(function (x) { return addNest(this$1.style, x, selector[x]); }); }
+      { Object.keys(selector).forEach(function (x) { return addNest(this$1.__style, x, selector[x]); }); }
     else if (selector)
-      { addNest(this.style, selector, properties); }
+      { addNest(this.__style, selector, properties); }
 
     return chain(this)
   }
@@ -416,14 +424,14 @@
       selector.split(selectorSplit).map(function (x) {
         x = x.trim();
         return (x.charAt(0) === ':' || x.charAt(0) === '[' ? '' : ' ') + x
-      }).join(',.$'),
+      }).join(',&'),
       parse(properties)
     );
   }
 
   pseudos.forEach(function (name) { return setProp('$' + hyphenToCamelCase(name.replace(/:/g, '')), function Pseudo(value, b) {
       if (value || b)
-        { add(this.style, name + (b ? '(' + value + ')' : ''), parse(b || value)); }
+        { add(this.__style, name + (b ? '(' + value + ')' : ''), parse(b || value)); }
       return chain(this)
     }); }
   );
@@ -431,9 +439,9 @@
   function setter(prop) {
     return function CssProperty(value) {
       if (!value && value !== 0) {
-        delete this.style[prop];
+        delete this.__style[prop];
       } else if (arguments.length > 0) {
-        add(this.style, prop, arguments.length === 1
+        add(this.__style, prop, arguments.length === 1
           ? formatValue(prop, value)
           : Array.prototype.slice.call(arguments).map(function (v) { return addPx(prop, v); }).join(' ')
         );
@@ -453,7 +461,7 @@
   }
 
   function addCss(selector, style) {
-    objectToRules(parse(style)).forEach(function (c) { return insert(c.replace(/\.\$\.?\$?/g, selector)); });
+    objectToRules(parse(style), selector, '', true).forEach(insert);
   }
 
   function helper(name, styling) {
@@ -468,7 +476,7 @@
         configurable: true,
         value: function Helper() {
           var result = styling.apply(null, arguments);
-          assign(this.style, result.style);
+          assign(this.__style, result.__style);
           return chain(this)
         }
       });
@@ -477,7 +485,7 @@
       Object.defineProperty(bss, name, {
         configurable: true,
         get: function() {
-          assign(this.style, parse(styling));
+          assign(this.__style, parse(styling));
           return chain(this)
         }
       });
@@ -526,7 +534,7 @@
 
       if (prop in helper) {
         typeof helper[prop] === 'function'
-          ? assign(acc, helper[prop].apply(helper, tokens).style)
+          ? assign(acc, helper[prop].apply(helper, tokens).__style)
           : assign(acc, helper[prop]);
       } else if (tokens.length > 0) {
         add(acc, prev, tokens.map(function (t) { return cssVar ? t : addPx(prev, t); }).join(' '));
@@ -569,7 +577,7 @@
       return stringToObject(str)
     }
 
-    return input.style || sanitize(input)
+    return input.__style || sanitize(input)
   }
 
   return bss;

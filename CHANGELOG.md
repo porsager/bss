@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## 1.2.9 -
+Add `&` to `$nest` as class placeholder (like sass/less)
+Fix same named props disappearing
+Clean up style output
+Fix raw browser module usage (added file extensions)
+
 ## 1.2.8 -
 Remove String.raw requirement
 Group multiple selectors in $nest
