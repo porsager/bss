@@ -240,7 +240,10 @@ Targeting nested children is sometimes useful, and is done by using `$nest` and 
 ``` js
 b.color('red').$nest('li', b.color('blue'))
 b.color('red').$nest(':hover li', b.color('blue'))
+b.color('red').$nest('> &', b.margin(10))
 ```
+
+`&` is a placeholder for the generated class like in `sass/less`.
 
 ## `.$media` @media queries
 
