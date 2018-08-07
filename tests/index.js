@@ -28,6 +28,7 @@ global.document = {
   },
   documentElement: {
     style: {
+      color: '',
       animation: '',
       display: '',
       backgroundColor: '',
@@ -84,6 +85,22 @@ o.spec('bss', function() {
   o('pseudo', function() {
     const cls = b.$hover(b.bc('green')).class
     o(b.getSheet()).equals(`.${cls}.${cls}:hover{background-color:green;}`)
+  })
+
+  o('same named props', function() {
+    const cls1 = b`
+      c blue
+      bc white
+    `.class
+    const cls2 = b`
+      c blue
+      bc white
+      c white
+    `.class
+    o(b.getSheet()).equals([
+      `.${cls1}.${cls1}{color:blue;background-color:white;}`,
+      `.${cls2}.${cls2}{color:blue;background-color:white;color:white;}`
+    ].join(''))
   })
 
   o('same named properties string', function() {
