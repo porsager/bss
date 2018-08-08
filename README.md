@@ -173,7 +173,7 @@ b.helper('f1', b.fontSize('3rem'))
 b.helper('p1', b.padding('0.25rem'))
 
 // Or like this:
-b.helper{
+b.helper({
   f1: b.fontSize('3rem'),
   p1: b.padding('0.25rem')
 })
