@@ -141,6 +141,9 @@ o.spec('bss', function() {
 
     const cls2 = b({ appearance: 'none' }).class
     o(b.getSheet()).equals(`.${cls2}.${cls2}{-moz-appearance:none;}`)
+
+    const cls3 = b('appearance none').class
+    o(b.getSheet()).equals(`.${cls3}.${cls3}{-moz-appearance:none;}`)
   })
 
   o('allows vendor prefix', function() {
