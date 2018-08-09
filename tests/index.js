@@ -35,7 +35,9 @@ global.document = {
       content: '',
       width: '0',
       padding: '',
-      boxShadow: ''
+      boxShadow: '',
+      MozAppearance: '',
+      webkitOverflowScrolling: ''
     }
   }
 }
@@ -131,6 +133,14 @@ o.spec('bss', function() {
   o('empty content string is set to ""', function() {
     const cls = b.$before(b.content('')).$after(b({ content: '' })).class
     o(b.getSheet()).equals(`.${cls}.${cls}::before{content:"";}.${cls}.${cls}::after{content:"";}`)
+  })
+
+  o('adds vendor prefix', function() {
+    const cls = b({ overflowScrolling: 'none' }).class
+    o(b.getSheet()).equals(`.${cls}.${cls}{-webkit-overflow-scrolling:none;}`)
+
+    const cls2 = b({ appearance: 'none' }).class
+    o(b.getSheet()).equals(`.${cls2}.${cls2}{-moz-appearance:none;}`)
   })
 
   o('allows vendor prefix', function() {
