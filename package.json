@@ -3,7 +3,7 @@
   "version": "1.2.9",
   "description": "Better Style Sheets",
   "main": "bss.js",
-  "module": "lib/index.js",
+  "module": "bss.esm.js",
   "scripts": {
     "test": "TEST=true npm run build && ospec",
     "prepublishOnly": "npm run build",

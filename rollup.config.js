@@ -32,5 +32,16 @@ export default [
       uglify({ mangle: true, compress: true }),
       filesize()
     ]
+  }, {
+    input: 'lib/index.js',
+    output: {
+      file: 'bss.esm.js',
+      format: 'esm',
+      sourcemap: true
+    },
+    plugins: [
+      buble(),
+      filesize()
+    ]
   }
 ]
