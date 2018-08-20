@@ -14,9 +14,9 @@
   "license": "WTFPL",
   "devDependencies": {
     "ospec": "3.0.1",
-    "rollup": "0.62.0",
+    "rollup": "0.64.1",
     "rollup-plugin-buble": "0.19.2",
-    "rollup-plugin-filesize": "2.0.0",
+    "rollup-plugin-filesize": "4.0.1",
     "rollup-plugin-uglify": "4.0.0"
   }
 }
