@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## 1.2.10 -
+Fix vendor prefixing
+Allow & ignore falsy values to `b()`
+Transpile esm version to ES5 for webpack compat
+
 ## 1.2.9 -
 Add `&` to `$nest` as class placeholder (like sass/less)
 Fix same named props disappearing
