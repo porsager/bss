@@ -157,7 +157,7 @@
       if (key === 'content' && value.charAt(0) !== '"')
         { acc[key] = '"' + value + '"'; }
       else
-        { acc[key in vendorMap ? vendorMap[key] : key] = formatValue(key, value); }
+        { acc[key] = formatValue(key, value); }
 
       return acc
     }, {})
@@ -177,7 +177,7 @@
   }
 
   function camelCaseToHyphen(camelCase) {
-    return camelCase.replace(/([A-Z])/g, '-$1').toLowerCase()
+    return camelCase.replace(/(\B[A-Z])/g, '-$1').toLowerCase()
   }
 
   function initials(camelCase) {
@@ -218,6 +218,7 @@
   }
 
   function propToString(prop, value) {
+    prop = prop in vendorMap ? vendorMap[prop] : prop;
     return (vendorRegex.test(prop) ? '-' : '')
       + (prop.charAt(0) === '-' && prop.charAt(1) === '-'
         ? prop
@@ -298,7 +299,7 @@
 
   function bss(input, value) {
     var b = chain(bss);
-    assign(b.__style, parse.apply(null, arguments));
+    input && assign(b.__style, parse.apply(null, arguments));
     return b
   }
 
