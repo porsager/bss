@@ -1,7 +1,10 @@
 ## [Unreleased]
 
+## 1.2.13 -
+Fix for undefined head in nodejs
+
 ## 1.2.12 -
-Fix for node base element registration
+Fix for nodejs base element registration
 
 ## 1.2.11 -
 Add support for running in node

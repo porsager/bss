@@ -244,7 +244,7 @@
   }
 
   var styleSheet = typeof document === 'object' && document.createElement('style');
-  styleSheet && document.head.appendChild(styleSheet);
+  styleSheet && document.head && document.head.appendChild(styleSheet);
 
   var sheet = styleSheet && styleSheet.sheet;
 
