@@ -98,9 +98,11 @@ var cssProperties = ['float'].concat(Object.keys(
 ).filter(function (p) { return p.indexOf('-') === -1 && p !== 'length'; }));
 
 function findWidth(obj) {
-  return obj.hasOwnProperty('width')
-    ? obj
-    : findWidth(Object.getPrototypeOf(obj))
+  return obj
+    ? obj.hasOwnProperty('width')
+      ? obj
+      : findWidth(Object.getPrototypeOf(obj))
+    : {}
 }
 
 var memoize = function (fn, cache) {

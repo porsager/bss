@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## 1.2.12 -
+Fix for node base element registration
+
 ## 1.2.11 -
 Add support for running in node
 
