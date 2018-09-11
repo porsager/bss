@@ -98,7 +98,9 @@
   };
 
   var cssProperties = ['float'].concat(Object.keys(
-    findWidth(document.documentElement.style)
+    typeof document === 'undefined'
+      ? {}
+      : findWidth(document.documentElement.style)
   ).filter(function (p) { return p.indexOf('-') === -1 && p !== 'length'; }));
 
   function findWidth(obj) {
@@ -239,9 +241,9 @@
     return value + (isNaN(value) ? '' : appendPx(key))
   }
 
-  var document$1 = window.document;
-  var styleSheet = document$1 && document$1.createElement('style');
-  styleSheet && document$1.head.appendChild(styleSheet);
+  var styleSheet = typeof document === 'object' && document.createElement('style');
+  styleSheet && document.head.appendChild(styleSheet);
+
   var sheet = styleSheet && styleSheet.sheet;
 
   var debug = false;
@@ -262,6 +264,10 @@
     classes = Object.create(null, {});
     count = 0;
     return content
+  }
+
+  function getRules() {
+    return rules
   }
 
   function insert(rule, index) {
@@ -332,6 +338,7 @@
   setProp('$import', $import);
   setProp('$nest', $nest);
   setProp('getSheet', getSheet);
+  setProp('getRules', getRules);
   setProp('helper', helper);
   setProp('css', css);
   setProp('classPrefix', classPrefix);
