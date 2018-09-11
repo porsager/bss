@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## 1.2.11 -
+Add support for running in node
+
 ## 1.2.10 -
 Fix vendor prefixing
 Allow & ignore falsy values to `b()`
