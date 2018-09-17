@@ -69,6 +69,7 @@ o.spec('bss', function() {
     o(b.bc('green').style).deepEquals({ backgroundColor: 'green' })
     o(b.p(20, 10, '50%').style).deepEquals({ padding: '20px 10px 50%' })
     o(b`p 20 10 50%`.style).deepEquals({ padding: '20px 10px 50%' })
+    o(b({ padding: '20 10 50%' }).style).deepEquals({ padding: '20px 10px 50%' })
     o(b.backgroundColor('red').style).deepEquals({ backgroundColor: 'red' })
   })
 
@@ -180,6 +181,7 @@ o.spec('bss', function() {
     o(b`w 1`.style).deepEquals({ width: '1px' })
     o(b('width 1').style).deepEquals({ width: '1px' })
     o(b({ width: 1 }).style).deepEquals({ width: '1px' })
+    o(b({ width: true }).style).deepEquals({ width: 'true' })
     o(b`boxShadow 1 1 10 black`.style).deepEquals({ boxShadow: '1px 1px 10px black' })
     o(b`border 1 solid black`.style).deepEquals({ border: '1px solid black' })
     o(b({ boxShadow: '1 1 10 black'}).style).deepEquals({ boxShadow: '1px 1px 10px black' })
