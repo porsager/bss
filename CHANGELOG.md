@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## 1.3.0 -
+Fix leaking instances (memory and styling)
+Fix border sides auto px in firefox 
+Fix px auto added wrongly to some values
+Ensure parsing and vendor prefixes work the same for all input methods
+
 ## 1.2.13 -
 Fix for undefined head in nodejs
 
