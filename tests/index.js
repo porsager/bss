@@ -147,6 +147,15 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`.${cls3}.${cls3}{-moz-appearance:none;}`)
   })
 
+  o('support variables in tagged template literals', function() {
+    o(b`display ${ 'flex' }`.style).deepEquals({ display: 'flex' })
+  })
+
+  o('support variables in tagged template literals in pseudos', function() {
+    const cls = b.$hover`display ${ 'flex' }`.class
+    o(b.getSheet()).equals(`.${cls}.${cls}:hover{display:flex;}`)
+  })
+
   o('allows vendor prefix', function() {
     const cls = b('-webkit-overflow-scrolling touch').class
     o(b.getSheet()).equals(`.${cls}.${cls}{-webkit-overflow-scrolling:touch;}`)
@@ -241,6 +250,22 @@ o.spec('bss', function() {
         size 20 20
         pointer
       `.style).deepEquals({ width: '20px', height: '20px', cursor: 'pointer' })
+    })
+
+    o('helpers as template literals', function() {
+      b.helper({
+        desktop: s => b.$media('(min-width:1024px)', s)
+      })
+      const cls = b.desktop`display flex`.class
+      o(b.getSheet()).equals(`@media (min-width:1024px){.${cls}.${cls}{display:flex;}}`)
+    })
+
+    o('helpers as template literals with variables', function() {
+      b.helper({
+        desktop: s => b.$media('(min-width:1024px)', s)
+      })
+      const cls = b.desktop`display ${ 'flex' }`.class
+      o(b.getSheet()).equals(`@media (min-width:1024px){.${cls}.${cls}{display:flex;}}`)
     })
   })
 
