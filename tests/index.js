@@ -70,6 +70,10 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`@media (max-width:600px){.${cls}.${cls}{background:red;}}`)
   })
 
+  o('object input using shortname properties', function() {
+    o(b({ bc: 'red' }).style).deepEquals({ backgroundColor: 'red' })
+  })
+
   o('multiline input', function() {
     o(b('transform scale(1)\n,rotate(0)').style).deepEquals({ transform: 'scale(1),rotate(0)' })
     o(b('transform scale(1),\nrotate(0)').style).deepEquals({ transform: 'scale(1),rotate(0)' })
