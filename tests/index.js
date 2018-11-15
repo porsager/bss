@@ -60,6 +60,16 @@ o.spec('bss', function() {
     o(b('foo', 'bar').style).deepEquals({ foo: 'bar' })
   })
 
+  o('object input with pseduos', function() {
+    const cls = b({ ':hover': { background: 'red' } }).class
+    o(b.getSheet()).equals(`.${cls}.${cls}:hover{background:red;}`)
+  })
+
+  o('object input with at-rules', function() {
+    const cls = b({ '@media (max-width:600px)': { background: 'red' } }).class
+    o(b.getSheet()).equals(`@media (max-width:600px){.${cls}.${cls}{background:red;}}`)
+  })
+
   o('multiline input', function() {
     o(b('transform scale(1)\n,rotate(0)').style).deepEquals({ transform: 'scale(1),rotate(0)' })
     o(b('transform scale(1),\nrotate(0)').style).deepEquals({ transform: 'scale(1),rotate(0)' })
@@ -128,7 +138,7 @@ o.spec('bss', function() {
   })
 
   o('same named properties style', function() {
-    o(b.d('-webkit-flex').d('flex').style).deepEquals({display:'flex'})
+    o(b.d('-webkit-flex').d('flex').style).deepEquals({ display:'flex' })
   })
 
   o('empty content string is set to ""', function() {

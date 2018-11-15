@@ -101,7 +101,7 @@ b`
 b({
   backgroundColor: 'black',
   textAlign: 'center',
-  $hover: {
+  ':hover': {
     backgroundColor: 'red'
   }
 })
