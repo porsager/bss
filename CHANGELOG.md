@@ -1,5 +1,13 @@
 ## [Unreleased]
 
+## 1.4.0 -
+Fix css values spanning several lines
+Allow shortNamese using object input
+Fix pseudos and @rules using object input
+Fix calling helpers and pseduos as tagged functions
+Add toString to support setting directly to class / className attrs
+Add bi as shorthand for background-image 
+
 ## 1.3.0 -
 Fix leaking instances (memory and styling)
 Fix border sides auto px in firefox 

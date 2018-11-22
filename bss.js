@@ -67,6 +67,7 @@
     bc : 'backgroundColor',
     br : 'borderRadius',
     bs : 'boxShadow',
+    bi : 'backgroundImage',
     c  : 'color',
     d  : 'display',
     f  : 'float',
@@ -111,6 +112,8 @@
       : {}
   }
 
+  var isProp = /^-?-?[a-z][a-z-_0-9]*$/i;
+
   var memoize = function (fn, cache) {
     if ( cache === void 0 ) cache = {};
 
@@ -153,22 +156,6 @@
 
   function lowercaseFirst(string) {
     return string.charAt(0).toLowerCase() + string.slice(1)
-  }
-
-  function sanitize(styles) {
-    return Object.keys(styles).reduce(function (acc, key) {
-      var value = styles[key];
-
-      if (!value && value !== 0 && value !== '')
-        { return acc }
-
-      if (key === 'content' && value.charAt(0) !== '"')
-        { acc[key] = '"' + value + '"'; }
-      else
-        { add(acc, key, value); }
-
-      return acc
-    }, {})
   }
 
   function assign(obj, obj2) {
@@ -340,8 +327,15 @@
     valueOf: {
       configurable: true,
       writable: true,
-      value: function ValueOf() {
+      value: function() {
         return '.' + this.class
+      }
+    },
+    toString: {
+      configurable: true,
+      writable: true,
+      value: function() {
+        return bss.valueOf()
       }
     }
   });
@@ -453,7 +447,9 @@
 
   pseudos.forEach(function (name) { return setProp('$' + hyphenToCamelCase(name.replace(/:/g, '')), function Pseudo(value, style) {
       var b = chain(this);
-      if (value || style)
+      if (isTagged(value))
+        { b.__style[name] = parse.apply(null, arguments); }
+      else if (value || style)
         { b.__style[name + (style ? '(' + value + ')' : '')] = parse(style || value); }
       return b
     }); }
@@ -494,9 +490,11 @@
       helper[name] = styling;
       Object.defineProperty(bss, name, {
         configurable: true,
-        value: function Helper() {
+        value: function Helper(input) {
           var b = chain(this);
-          var result = styling.apply(null, arguments);
+          var result = isTagged(input)
+            ? styling(raw(input, arguments))
+            : styling.apply(null, arguments);
           assign(b.__style, result.__style);
           return b
         }
@@ -530,19 +528,21 @@
       , prev;
 
     return string.trim().split(/;|\n/).reduce(function (acc, line) {
+      if (!line)
+        { return acc }
       line = last + line.trim();
+      var ref = line.replace(/[ :]+/, ' ').split(' ');
+      var key = ref[0];
+      var tokens = ref.slice(1);
+
       last = line.charAt(line.length - 1) === ',' ? line : '';
       if (last)
         { return acc }
 
-      if (line.charAt(0) === ',') {
-        acc[prev] += line;
+      if (line.charAt(0) === ',' || !isProp.test(key)) {
+        acc[prev] += ' ' + line;
         return acc
       }
-
-      var ref = line.replace(/[ :]+/, ' ').split(' ');
-      var key = ref[0];
-      var tokens = ref.slice(1);
 
       if (!key)
         { return acc }
@@ -583,7 +583,6 @@
   }
 
   function parse(input, value) {
-    var arguments$1 = arguments;
     var obj;
 
     if (typeof input === 'string') {
@@ -591,14 +590,41 @@
         { return (( obj = {}, obj[input] = value, obj )) }
 
       return stringToObject(input)
-    } else if (Array.isArray(input) && typeof input[0] === 'string') {
-      var str = '';
-      for (var i = 0; i < input.length; i++)
-        { str += input[i] + (arguments$1[i + 1] || ''); }
-      return stringToObject(str)
+    } else if (isTagged(input)) {
+      return stringToObject(raw(input, arguments))
     }
 
     return input.__style || sanitize(input)
+  }
+
+  function isTagged(input) {
+    return Array.isArray(input) && typeof input[0] === 'string'
+  }
+
+  function raw(input, args) {
+    var str = '';
+    for (var i = 0; i < input.length; i++)
+      { str += input[i] + (args[i + 1] || ''); }
+    return str
+  }
+
+  function sanitize(styles) {
+    return Object.keys(styles).reduce(function (acc, key) {
+      var value = styles[key];
+      key = shorts[key] || key;
+
+      if (!value && value !== 0 && value !== '')
+        { return acc }
+
+      if (key === 'content' && value.charAt(0) !== '"')
+        { acc[key] = '"' + value + '"'; }
+      else if (typeof value === 'object')
+        { acc[key] = sanitize(value); }
+      else
+        { add(acc, key, value); }
+
+      return acc
+    }, {})
   }
 
   return bss;
