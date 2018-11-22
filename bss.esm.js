@@ -523,7 +523,7 @@ var stringToObject = memoize(function (string) {
   var last = ''
     , prev;
 
-  return string.trim().split(/;|\n/).reduce(function (acc, line) {
+  return string.trim().split(';').reduce(function (acc, line) {
     line = last + line.trim();
     last = line.charAt(line.length - 1) === ',' ? line : '';
     if (last)
