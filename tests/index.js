@@ -37,6 +37,8 @@ global.document = {
       padding: '',
       boxShadow: '',
       MozAppearance: '',
+      transform: '',
+      position: '',
       webkitOverflowScrolling: ''
     }
   }
@@ -75,8 +77,7 @@ o.spec('bss', function() {
   })
 
   o('multiline input', function() {
-    o(b('transform scale(1)\n,rotate(0)').style).deepEquals({ transform: 'scale(1),rotate(0)' })
-    o(b('transform scale(1),\nrotate(0)').style).deepEquals({ transform: 'scale(1),rotate(0)' })
+    o(b('transform scale(1)\nrotate(0)').style).deepEquals({ transform: 'scale(1) rotate(0)' })
   })
 
   o('default css properties', function() {
@@ -320,5 +321,16 @@ o.spec('bss', function() {
     b.valueOf = newValueOf
     o(b.valueOf).equals(newValueOf)
     o('' + b.bc('red')).equals('test')
+  })
+
+  o('Multiline css', function() {
+    o(b`
+      position  : absolute;
+      transform : translate(-50%, -50%)
+                  rotate(-45deg);
+    `.style).deepEquals({
+      position: 'absolute',
+      transform: 'translate(-50%, -50%) rotate(-45deg)'
+    })
   })
 })
