@@ -299,6 +299,10 @@ b.setDebug(true)
 
 The only caveat here is that animations and applied styles can result in small quicks like blinking fonts and styles.
 
+## Specificity
+
+To enhance developer expectations bss uses double class names for regular definitions to give higher specificity than nested items, which might have rules added from regular css, or from `$nest`. To support this `$nest` will not increase specificity by only adding the class name once.
+
 ## Browser support
 `bss` is tested and works in ie9+ and the other major browsers.
 > TODO - Create browser support table
