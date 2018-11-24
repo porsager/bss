@@ -278,10 +278,13 @@
     if (debug)
       { return styleSheet.textContent = rules.join('\n') }
 
-    sheet && sheet.insertRule(rule, arguments.length > 1
-      ? index
-      : sheet.cssRules.length
-    );
+    try {
+      sheet && sheet.insertRule(rule, arguments.length > 1
+        ? index
+        : sheet.cssRules.length);
+    } catch (e) {
+      // Ignore thrown errors in eg. firefox for unsupported strings (::-webkit-inner-spin-button)
+    }
   }
 
   function createClass(style) {
@@ -335,7 +338,7 @@
       configurable: true,
       writable: true,
       value: function() {
-        return bss.valueOf()
+        return this.class
       }
     }
   });
@@ -398,7 +401,9 @@
 
   setProp('content', function Content(arg) {
     var b = chain(this);
-    b.__style.content = '"' + arg + '"';
+    arg === null || arg === undefined || arg === false
+      ? delete b.__style.content
+      : b.__style.content = '"' + arg + '"';
     return b
   });
 
@@ -527,7 +532,7 @@
     var last = ''
       , prev;
 
-    return string.trim().split(/;|\n/).reduce(function (acc, line) {
+    return string.trim().replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*/g, '').split(/;|\n/).reduce(function (acc, line) {
       if (!line)
         { return acc }
       line = last + line.trim();
