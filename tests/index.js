@@ -333,4 +333,15 @@ o.spec('bss', function() {
       transform: 'translate(-50%, -50%) rotate(-45deg)'
     })
   })
+
+  o('Comments in strings', function() {
+    o(b`
+      position  : absolute; // This is absolute
+      transform : translate(-50%, -50%) // This is multi line
+                  rotate(-45deg); // And here it ends
+    `.style).deepEquals({
+      position: 'absolute',
+      transform: 'translate(-50%, -50%) rotate(-45deg)'
+    })
+  })
 })
