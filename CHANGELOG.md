@@ -1,5 +1,8 @@
 ## v[Unreleased]
 
+## v1.5.1 -
+- Add better `&`` handling in `$nest`
+
 ## v1.5.0 -
 - Support comments in template strings
 - Don't throw for unsupported defs in firefox

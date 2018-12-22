@@ -178,7 +178,7 @@ function objectToRules(style, selector, suffix, single) {
   if ( suffix === void 0 ) suffix = '';
 
   var base = {};
-
+  var extra = suffix.indexOf('&') > -1 && suffix.indexOf(',') === -1 ? '' : '&';
   var rules = [];
 
   Object.keys(style).forEach(function (prop) {
@@ -192,7 +192,7 @@ function objectToRules(style, selector, suffix, single) {
 
   if (Object.keys(base).length) {
     rules.unshift(
-      ((single || (suffix.charAt(0) === ' ') ? '' : '&') + '&' + suffix).replace(/&/g, selector) +
+      ((single || (suffix.charAt(0) === ' ') ? '' : '&') + extra + suffix).replace(/&/g, selector).trim() +
       '{' + stylesToCss(base) + '}'
     );
   }
