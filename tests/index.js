@@ -198,7 +198,13 @@ o.spec('bss', function() {
 
   o('nest with ampersand', function() {
     const cls = b.$nest({ 'th &' : b('background blue') }).class
-    o(b.getSheet()).equals(`.${cls} th .${cls}{background:blue;}`)
+    o(b.getSheet()).equals(`th .${cls}{background:blue;}`)
+
+    const cls2 = b.$nest({ 'th&' : b('background blue') }).class
+    o(b.getSheet()).equals(`th.${cls2}{background:blue;}`)
+
+    const cls3 = b.$nest({ '& th' : b('background blue') }).class
+    o(b.getSheet()).equals(`.${cls3} th{background:blue;}`)
   })
 
   o('add px', function() {

@@ -244,6 +244,11 @@ b.color('red').$nest('> &', b.margin(10))
 ```
 
 `&` is a placeholder for the generated class like in `sass/less`.
+Once you use `&` in `$nest` you take full responsibility of adding the generated class in the correct places to avoid creating global selectors.
+One case where this could happen is if using the comma seperator to make multiple selectores, like doing `$nest('th &, tr', ...)`. This would create a global `tr` style. To do this right the code would need to be `$nest('th &, tr &, ...)`.
+
+Normally bss handles this for you such that `$nest('th, tr', ...)` will be scoped locally, but using `&` overrides this behavior.
+
 
 ## `.$media` @media queries
 
