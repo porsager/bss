@@ -1,5 +1,9 @@
 ## v[Unreleased]
 
+## v1.5.2 -
+- Fix `.css()` + `.$import` use
+- Set id of sheet to class prefix
+
 ## v1.5.1 -
 - Add better `&`` handling in `$nest`
 

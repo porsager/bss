@@ -243,8 +243,12 @@
     return prop.charAt(0) === '-' && prop.charAt(1) === '-'
   }
 
+  var classPrefix = 'b' + ('000' + ((Math.random() * 46656) | 0).toString(36)).slice(-3) +
+                      ('000' + ((Math.random() * 46656) | 0).toString(36)).slice(-3);
+
   var styleSheet = typeof document === 'object' && document.createElement('style');
   styleSheet && document.head && document.head.appendChild(styleSheet);
+  styleSheet && (styleSheet.id = classPrefix);
 
   var sheet = styleSheet && styleSheet.sheet;
 
@@ -252,9 +256,6 @@
   var classes = Object.create(null, {});
   var rules = [];
   var count = 0;
-
-  var classPrefix = 'b' + ('000' + ((Math.random() * 46656) | 0).toString(36)).slice(-3) +
-                      ('000' + ((Math.random() * 46656) | 0).toString(36)).slice(-3);
 
   function setDebug(d) {
     debug = d;
@@ -425,6 +426,9 @@
   }
 
   function $import(value) {
+    if (value && !/^('|"|url\('|url\(")/.test(value))
+      { value = '"' + value + '"'; }
+
     if (value)
       { insert('@import ' + value + ';', 0); }
 
@@ -482,7 +486,7 @@
   }
 
   function addCss(selector, style) {
-    objectToRules(parse(style), selector, '', true).forEach(insert);
+    objectToRules(parse(style), selector, '', true).forEach(function (rule) { return insert(rule); });
   }
 
   function helper(name, styling) {
