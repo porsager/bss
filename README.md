@@ -315,7 +315,15 @@ To enhance developer expectations bss uses double class names for regular defini
 ### Prefixes
 When using `bss` in the browser it automatically adds only the necessary prefixes, so you can go ahead and use the raw property and expect it to work in browsers that only has the prefixed version.
 
-Prefixes for css property values like `linear-gradient` are not supported yet.
+Prefixes for css property values like `linear-gradient` are not supported yet, so if you want to support older browsers you'll need to add them manually like
+```
+b`
+  background -webkit-linear-gradient(45deg, red, blue)
+  background -moz-linear-gradient(45deg, red, blue)
+  background linear-gradient(45deg, red, blue)
+  ...etc
+`
+```
 
 
 ## Server support
