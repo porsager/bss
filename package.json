@@ -1,6 +1,6 @@
 {
   "name": "bss",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "description": "Better Style Sheets",
   "main": "bss.js",
   "module": "bss.esm.js",

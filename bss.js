@@ -160,8 +160,11 @@
 
   function assign(obj, obj2) {
     for (var key in obj2) {
-      if (obj2.hasOwnProperty(key))
-        { obj[key] = obj2[key]; }
+      if (obj2.hasOwnProperty(key)) {
+        obj[key] = typeof obj2[key] === 'string'
+          ? obj2[key]
+          : assign(obj[key] || {}, obj2[key]);
+      }
     }
     return obj
   }
@@ -236,7 +239,7 @@
   function formatValue(prop, value) {
     return value in vendorValuePrefix
       ? vendorValuePrefix[value]
-      : value + (isNaN(value) || value === null || typeof value === 'boolean' || cssVar(prop) ? '' : appendPx(prop))
+      : value + (isNaN(value) || value === null || value === 0 || value === '0' || typeof value === 'boolean' || cssVar(prop) ? '' : appendPx(prop))
   }
 
   function cssVar(prop) {
@@ -613,7 +616,7 @@
   function raw(input, args) {
     var str = '';
     for (var i = 0; i < input.length; i++)
-      { str += input[i] + (args[i + 1] || ''); }
+      { str += input[i] + (args[i + 1] || args[i + 1] === 0 ? args[i + 1] : ''); }
     return str
   }
 

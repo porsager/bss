@@ -1,5 +1,9 @@
 ## v[Unreleased]
 
+## v1.6.0 -
+- Fix usage of 0 in template strings eg. `${ 0 }`
+- Fix composing of nested instances
+
 ## v1.5.2 -
 - Fix `.css()` + `.$import` use
 - Set id of sheet to class prefix
