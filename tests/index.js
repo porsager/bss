@@ -177,6 +177,10 @@ o.spec('bss', function() {
     o(b`display ${ 'flex' }`.style).deepEquals({ display: 'flex' })
   })
 
+  o('support 0 in tagged template literals', function() {
+    o(b`top ${ 0 }`.style).deepEquals({ top: '0' })
+  })
+
   o('support variables in tagged template literals in pseudos', function() {
     const cls = b.$hover`display ${ 'flex' }`.class
     o(b.getSheet()).equals(`.${cls}.${cls}:hover{display:flex;}`)
@@ -228,6 +232,10 @@ o.spec('bss', function() {
     o(b({ boxShadow: '1 1 10 black'}).style).deepEquals({ boxShadow: '1px 1px 10px black' })
     o(b({ border: '1 solid black' }).style).deepEquals({ border: '1px solid black' })
     o(b.w(1).style).deepEquals({ width: '1px' })
+  })
+
+  o('do not add px to 0', function() {
+    o(b`w 0`.style).deepEquals({ width: '0' })
   })
 
   o('clears empty', function() {
