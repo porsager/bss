@@ -160,6 +160,49 @@ b.bc('black')
  )
 ```
 
+<details><summary>All short property names</summary>
+<p>
+
+| Shorthand | CSS               |
+| --------: | ----------------- |
+|  `ai`     | `alignItems`      |
+|  `b`      | `bottom`          |
+|  `bc`     | `backgroundColor` |
+|  `br`     | `borderRadius`    |
+|  `bs`     | `boxShadow`       |
+|  `bi`     | `backgroundImage` |
+|  `c`      | `color`           |
+|  `d`      | `display`         |
+|  `f`      | `float`           |
+|  `fd`     | `flexDirection`   |
+|  `ff`     | `fontFamily`      |
+|  `fs`     | `fontSize`        |
+|  `h`      | `height`          |
+|  `jc`     | `justifyContent`  |
+|  `l`      | `left`            |
+|  `lh`     | `lineHeight`      |
+|  `ls`     | `letterSpacing`   |
+|  `m`      | `margin`          |
+|  `mb`     | `marginBottom`    |
+|  `ml`     | `marginLeft`      |
+|  `mr`     | `marginRight`     |
+|  `mt`     | `marginTop`       |
+|  `o`      | `opacity`         |
+|  `p`      | `padding`         |
+|  `pb`     | `paddingBottom`   |
+|  `pl`     | `paddingLeft`     |
+|  `pr`     | `paddingRight`    |
+|  `pt`     | `paddingTop`      |
+|  `r`      | `right`           |
+|  `t`      | `top`             |
+|  `ta`     | `textAlign`       |
+|  `td`     | `textDecoration`  |
+|  `tt`     | `textTransform`   |
+|  `w`      | `width`           |
+
+</p>
+</details>
+
 ## `.helper`
 
 Define your own helpers to work in a fashion similar to tachyons, or simply to make your life easier.
