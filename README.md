@@ -210,6 +210,25 @@ b.desktop(`
 b.helper('desktop', style => b.$media('(min-width:801px)', style))
 ```
 
+Helpers can be called in a couple different ways:
+
+```js
+b.helper('size', (width, height) =>
+  b.width(width).height(height || width)
+)
+
+// Can be invoked by css/lean strings:
+b`
+  color green // you can mix in normal styles
+  size 50 100
+`
+
+// Or functions:
+b.color('green').size(50, 100)
+```
+
+When invoking a helper through a css/lean string arguments are converted to strings, whereas functions can accept object arguments.
+
 ## Pixel values and Numbers
 
 Properties accepting pixel values will automatically have `px` added if a number type is passed.
