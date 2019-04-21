@@ -108,6 +108,14 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`.${cls}.${cls}{background-image:url(https://bss.com/);}`)
   })
 
+  o('values can have valid semicolons', function() {
+    const cls = b`
+      backgroundImage: url(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==)
+      content: "a;here"
+    `.class
+    o(b.getSheet()).equals(`.${cls}.${cls}{background-image:url(data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==);content:"a;here";}`)
+  })
+
   o('@import', function() {
     b.$import('sanitize.css')
     o(b.getSheet()).equals('@import "sanitize.css";')
