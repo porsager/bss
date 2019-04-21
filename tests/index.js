@@ -72,7 +72,7 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`@media (max-width:600px){.${cls}.${cls}{background:red;}}`)
   })
 
-  o.only('Chained $nest in @media', function() {
+  o('Chained $nest in @', function() {
     const cls = b.$media('(min-width: 0px)',
       b`
         font-family: Helvetica;
