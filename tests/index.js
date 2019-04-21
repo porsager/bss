@@ -255,6 +255,15 @@ o.spec('bss', function() {
 
   o.spec('helpers', function() {
 
+    o('can have any name', function() {
+      b.helper('fooBar', b`foo bar`)
+      b.helper('foo-bar', b`fiz baz`)
+      o(b`
+        fooBar
+        foo-bar
+      `.style).deepEquals({ foo: 'bar', fiz: 'baz' })
+    })
+
     o('without args', function() {
       b.helper('foobar', b`foo bar`)
       o(b.foobar.style).deepEquals({ foo: 'bar' })
