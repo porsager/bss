@@ -192,7 +192,7 @@
 
     Object.keys(style).forEach(function (prop) {
       if (prop.charAt(0) === '@')
-        { rules.push(prop + '{' + objectToRules(style[prop], selector, suffix, single) + '}'); }
+        { rules.push(prop + '{' + objectToRules(style[prop], selector, suffix, single).join('') + '}'); }
       else if (typeof style[prop] === 'object')
         { rules = rules.concat(objectToRules(style[prop], selector, suffix + prop, single)); }
       else
@@ -539,7 +539,7 @@
     var last = ''
       , prev;
 
-    return string.trim().replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*/g, '').split(/;|\n/).reduce(function (acc, line) {
+    return string.trim().replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*(?![^("]*[)"])/g, '').split(/;(?![^("]*[)"])|\n/).reduce(function (acc, line) {
       if (!line)
         { return acc }
       line = last + line.trim();
@@ -565,7 +565,11 @@
 
       prev = shorts[prop] || prop;
 
-      if (prop in helper) {
+      if (key in helper) {
+        typeof helper[key] === 'function'
+          ? assign(acc, helper[key].apply(helper, tokens).__style)
+          : assign(acc, helper[key]);
+      } else if (prop in helper) {
         typeof helper[prop] === 'function'
           ? assign(acc, helper[prop].apply(helper, tokens).__style)
           : assign(acc, helper[prop]);

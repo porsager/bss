@@ -1,5 +1,10 @@
 ## v[Unreleased]
 
+## v1.6.1 -
+- Allow hyphenated names for helpers
+- Fix multiple rules inside @ rules
+- Fix ; and // inside url or content ""
+
 ## v1.6.0 -
 - Fix usage of 0 in template strings eg. `${ 0 }`
 - Fix composing of nested instances
