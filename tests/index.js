@@ -72,6 +72,15 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`@media (max-width:600px){.${cls}.${cls}{background:red;}}`)
   })
 
+  o.only('Chained $nest in @media', function() {
+    const cls = b.$media('(min-width: 0px)',
+      b`
+        font-family: Helvetica;
+      `.$nest('h1', b.c('red'))
+    ).class
+    o(b.getSheet()).equals(`@media (min-width: 0px){.${cls}.${cls}{font-family:Helvetica;}.${cls} h1{color:red;}}`)
+  })
+
   o('object input using shortname properties', function() {
     o(b({ bc: 'red' }).style).deepEquals({ backgroundColor: 'red' })
   })
