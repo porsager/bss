@@ -1,8 +1,8 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global.b = factory());
-}(this, (function () { 'use strict';
+  (global = global || self, global.b = factory());
+}(this, function () { 'use strict';
 
   var pseudos = [
     ':active',
@@ -645,5 +645,5 @@
 
   return bss;
 
-})));
+}));
 //# sourceMappingURL=bss.js.map

@@ -1,5 +1,8 @@
 ## v[Unreleased]
 
+## v1.6.2 -
+- Just braces security update (part of rollup)
+
 ## v1.6.1 -
 - Allow hyphenated names for helpers
 - Fix multiple rules inside @ rules
