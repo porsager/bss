@@ -239,6 +239,13 @@ o.spec('bss', function() {
     o(b.getSheet()).equals(`.${cls3} th{background:blue;}`)
   })
 
+  o('nest multiple identical selectors', function() {
+    const cls = b.$nest('p.broken', 'background: purple')
+     .$nest('p.broken', 'color: yellow').class
+
+    o(b.getSheet()).equals(`.${cls} p.broken{background:purple;color:yellow;}`)
+  })
+
   o('add px', function() {
     o(b`w 1`.style).deepEquals({ width: '1px' })
     o(b('width 1').style).deepEquals({ width: '1px' })
