@@ -1,5 +1,8 @@
 ## v[Unreleased]
 
+## v1.6.3 -
+- Fixed multiple identical selectors used in $nest
+
 ## v1.6.2 -
 - Just braces security update (part of rollup)
 

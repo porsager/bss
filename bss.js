@@ -449,12 +449,14 @@
   }
 
   function addNest(style, selector, properties) {
-    style[
-      selector.split(selectorSplit).map(function (x) {
-        x = x.trim();
-        return (x.charAt(0) === ':' || x.charAt(0) === '[' ? '' : ' ') + x
-      }).join(',&')
-    ] = parse(properties);
+    var prop = selector.split(selectorSplit).map(function (x) {
+      x = x.trim();
+      return (x.charAt(0) === ':' || x.charAt(0) === '[' ? '' : ' ') + x
+    }).join(',&');
+
+    prop in style
+      ? assign(style[prop], parse(properties))
+      : style[prop] = parse(properties);
   }
 
   pseudos.forEach(function (name) { return setProp('$' + hyphenToCamelCase(name.replace(/:/g, '')), function Pseudo(value, style) {
