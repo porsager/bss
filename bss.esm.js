@@ -163,20 +163,24 @@ function assign(obj, obj2) {
   return obj
 }
 
+var hyphenSeparator = /-([a-z])/g;
 function hyphenToCamelCase(hyphen) {
-  return hyphen.slice(hyphen.charAt(0) === '-' ? 1 : 0).replace(/-([a-z])/g, function(match) {
+  return hyphen.slice(hyphen.charAt(0) === '-' ? 1 : 0).replace(hyphenSeparator, function(match) {
     return match[1].toUpperCase()
   })
 }
 
+var camelSeparator = /(\B[A-Z])/g;
 function camelCaseToHyphen(camelCase) {
-  return camelCase.replace(/(\B[A-Z])/g, '-$1').toLowerCase()
+  return camelCase.replace(camelSeparator, '-$1').toLowerCase()
 }
 
+var initialMatch = /([A-Z])/g;
 function initials(camelCase) {
-  return camelCase.charAt(0) + (camelCase.match(/([A-Z])/g) || []).join('').toLowerCase()
+  return camelCase.charAt(0) + (camelCase.match(initialMatch) || []).join('').toLowerCase()
 }
 
+var ampersandMatch = /&/g;
 function objectToRules(style, selector, suffix, single) {
   if ( suffix === void 0 ) suffix = '';
 
@@ -195,7 +199,7 @@ function objectToRules(style, selector, suffix, single) {
 
   if (Object.keys(base).length) {
     rules.unshift(
-      ((single || (suffix.charAt(0) === ' ') ? '' : '&') + extra + suffix).replace(/&/g, selector).trim() +
+      ((single || (suffix.charAt(0) === ' ') ? '' : '&') + extra + suffix).replace(ampersandMatch, selector).trim() +
       '{' + stylesToCss(base) + '}'
     );
   }
@@ -206,7 +210,7 @@ function objectToRules(style, selector, suffix, single) {
 var selectorSplit = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
 
 function stylesToCss(style) {
-  return Object.keys(style).reduce(function (acc, prop) { return acc + propToString(prop.replace(/!/g, ''), style[prop]); }
+  return Object.keys(style).reduce(function (acc, prop) { return acc + propToString(prop.charAt(0) === '!' ? prop.slice(1) : prop, style[prop]); }
   , '')
 }
 
@@ -365,7 +369,7 @@ function chain(instance) {
 
         return Object.keys(this.__style).reduce(function (acc, key) {
           if (typeof this$1.__style[key] === 'number' || typeof this$1.__style[key] === 'string')
-            { acc[key.replace(/^!/, '')] = this$1.__style[key]; }
+            { acc[key.charAt(0) === '!' ? key.slice(1) : key] = this$1.__style[key]; }
           return acc
         }, {})
       }
@@ -422,12 +426,11 @@ function $media(value, style) {
   return b
 }
 
+var hasUrl = /^('|"|url\('|url\(")/i;
 function $import(value) {
-  if (value && !/^('|"|url\('|url\(")/.test(value))
-    { value = '"' + value + '"'; }
-
-  if (value)
-    { insert('@import ' + value + ';', 0); }
+  value && insert('@import '
+    + (hasUrl.test(value) ? value : '"' + value + '"')
+    + ';', 0);
 
   return chain(this)
 }
@@ -531,15 +534,19 @@ function short(prop) {
   return short
 }
 
+var blockEndMatch = /;(?![^("]*[)"])|\n/;
+var commentsMatch = /\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*(?![^("]*[)"])/g;
+var propSeperator = /[ :]+/;
+
 var stringToObject = memoize(function (string) {
   var last = ''
     , prev;
 
-  return string.trim().replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*(?![^("]*[)"])/g, '').split(/;(?![^("]*[)"])|\n/).reduce(function (acc, line) {
+  return string.trim().replace(commentsMatch, '').split(blockEndMatch).reduce(function (acc, line) {
     if (!line)
       { return acc }
     line = last + line.trim();
-    var ref = line.replace(/[ :]+/, ' ').split(' ');
+    var ref = line.replace(propSeperator, ' ').split(' ');
     var key = ref[0];
     var tokens = ref.slice(1);
 
