@@ -1,12 +1,12 @@
 import buble from 'rollup-plugin-buble'
-import { uglify } from 'rollup-plugin-uglify'
+import { terser } from 'rollup-plugin-terser'
 import filesize from 'rollup-plugin-filesize'
 
 export default [
   {
     input: 'lib/index.js',
     output: {
-      file: 'bss.js',
+      file: 'dist/bss.js',
       exports: 'default',
       format: 'umd',
       name: 'b',
@@ -21,7 +21,7 @@ export default [
   }, {
     input: 'lib/index.js',
     output: {
-      file: 'bss.min.js',
+      file: 'dist/bss.min.js',
       exports: 'default',
       format: 'umd',
       name: 'b',
@@ -29,13 +29,13 @@ export default [
     },
     plugins: [
       buble(),
-      uglify({ mangle: true, compress: true }),
+      terser({ mangle: true, compress: true }),
       filesize()
     ]
   }, {
     input: 'lib/index.js',
     output: {
-      file: 'bss.esm.js',
+      file: 'dist/bss.esm.js',
       format: 'esm',
       sourcemap: true
     },
