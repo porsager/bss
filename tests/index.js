@@ -14,6 +14,8 @@ const styleEl = function() {
       setProperty: (prop) => {
         if (prop === 'backgroundColor')
           throw new Error()
+        if (prop === 'opacity')
+          el.style[prop] = '1'
       }
     }
   }
@@ -30,6 +32,7 @@ global.document = {
     style: {
       color: '',
       animation: '',
+      opacity: '',
       display: '',
       backgroundColor: '',
       content: '',
@@ -55,6 +58,15 @@ const b = require('../dist/bss')
 const cn = () => '.' + b.prefix + b.count
 
 o.spec('bss', function() {
+
+  o('Pseudo works', () => {
+    b`
+      :hover {
+        opacity 0.5
+      }
+    `
+    o(b.rules.pop()).equals(cn() + ':hover{opacity:0.5;}')
+  })
 
   o('White space around colon', () => {
     b`position:absolute;
