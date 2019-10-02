@@ -68,6 +68,14 @@ o.spec('bss', function() {
     o(b.rules.pop()).equals(cn() + ':hover{opacity:0.5;}')
   })
 
+  o('Fails gracefully on bad prop syntax', () => {
+    b`
+      transform translateY(20)
+                rotate(${ 'sdfk' })
+    `
+    o(b.rules.pop()).equals(cn() + '{transform:translateY(20px);rotate:(var(--' + cn().slice(1) + '-1));}')
+  })
+
   o('White space around colon', () => {
     b`position:absolute;
       position: absolute;
