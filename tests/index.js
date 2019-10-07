@@ -59,6 +59,20 @@ const cn = () => '.' + b.prefix + b.count
 
 o.spec('bss', function() {
 
+  o('Nested classes', () => {
+    const r = b`
+      ${
+        b`
+          c white
+        `
+      }
+      bc blue
+    `
+    o(r.classes.length).equals(2)
+    o(b.rules.pop().replace(/.*{/, '{')).equals('{background-color:blue;}')
+    o(b.rules.pop().replace(/.*{/, '{')).equals('{color:white;}')
+  })
+
   o('Pseudo works', () => {
     b`
       :hover {
@@ -74,6 +88,14 @@ o.spec('bss', function() {
                 rotate(${ 'sdfk' })
     `
     o(b.rules.pop()).equals(cn() + '{transform:translateY(20px);rotate:(var(--' + cn().slice(1) + '-1));}')
+  })
+
+  o('Support multiline props', () => {
+    b`
+      transform: translateY(20)
+                 rotate(${ 'sdfk' });
+    `
+    o(b.rules.pop()).equals(cn() + '{transform:translateY(20px) rotate(var(--' + cn().slice(1) + '-1));}')
   })
 
   o('White space around colon', () => {
