@@ -64,13 +64,19 @@ o.spec('bss', function() {
       ${
         b`
           c white
+          ${
+            b`
+              position relative
+            `
+          }
         `
       }
       bc blue
     `
-    o(r.classes.length).equals(2)
+    o(r.classes.length).equals(3)
     o(b.rules.pop().replace(/.*{/, '{')).equals('{background-color:blue;}')
     o(b.rules.pop().replace(/.*{/, '{')).equals('{color:white;}')
+    o(b.rules.pop().replace(/.*{/, '{')).equals('{position:relative;}')
   })
 
   o('Pseudo works', () => {
