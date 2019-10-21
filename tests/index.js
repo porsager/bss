@@ -10,6 +10,7 @@ const styleEl = function() {
         el.sheet.textContent += rule
       }
     },
+    getAttribute: () => null,
     style: {
       setProperty: (prop) => {
         if (prop === 'backgroundColor')
@@ -48,6 +49,7 @@ global.document = {
 }
 
 global.window = {
+  document: global.document,
   navigator: {
     userAgent: 'test'
   }
@@ -149,6 +151,24 @@ o.spec('bss', function() {
         }
       }
     `
+    o(b.rules.pop()).equals('@media screen and (min-width: 900px){' + cn() + ' article{padding:1rem 3rem;}}')
+  })
+
+  o.only('@media @media', () => {
+    b`
+      @media screen and (min-width: 900px) {
+        article {
+          padding: 1rem 3rem;
+        }
+      }
+
+      @media screen and (min-width: 1500px) {
+        article {
+          padding: 2rem 6rem;
+        }
+      }
+    `
+    o(b.rules.pop()).equals('@media screen and (min-width: 1500px){' + cn() + ' article{padding:2rem 6rem;}}')
     o(b.rules.pop()).equals('@media screen and (min-width: 900px){' + cn() + ' article{padding:1rem 3rem;}}')
   })
 
