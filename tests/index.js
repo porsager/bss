@@ -61,6 +61,15 @@ const cn = () => '.' + b.prefix + b.count
 
 o.spec('bss', function() {
 
+  o('raw', () => {
+    b.raw`
+      html {
+        width 50
+      }
+    `
+    o(b.rules.pop()).equals('html{width:50px;}')
+  })
+
   o('Nested classes', () => {
     const r = b`
       ${
@@ -154,7 +163,7 @@ o.spec('bss', function() {
     o(b.rules.pop()).equals('@media screen and (min-width: 900px){' + cn() + ' article{padding:1rem 3rem;}}')
   })
 
-  o.only('@media @media', () => {
+  o('@media @media', () => {
     b`
       @media screen and (min-width: 900px) {
         article {
