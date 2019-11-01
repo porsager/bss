@@ -61,8 +61,8 @@ const cn = () => '.' + b.prefix + b.count
 
 o.spec('bss', function() {
 
-  o('raw', () => {
-    b.raw`
+  o('global', () => {
+    b.global`
       html {
         width 50
       }
@@ -71,23 +71,22 @@ o.spec('bss', function() {
   })
 
   o('Nested classes', () => {
-    const r = b`
-      ${
-        b`
-          c white
-          ${
-            b`
-              position relative
-            `
-          }
-        `
-      }
+    b`
+      ${ b`
+        c white
+        ${ b`
+          position relative
+          ${ b`
+            font-size 20
+          `}
+        `}
+      `}
       bc blue
-    `
-    o(r.classes.length).equals(3)
-    o(b.rules.pop().replace(/.*{/, '{')).equals('{background-color:blue;}')
-    o(b.rules.pop().replace(/.*{/, '{')).equals('{color:white;}')
-    o(b.rules.pop().replace(/.*{/, '{')).equals('{position:relative;}')
+    `.toString()
+
+    o(b.rules.shift().replace(/.*{/, '{')).equals(
+      '{color:white;position:relative;font-size:20px;background-color:blue;}'
+    )
   })
 
   o('Pseudo works', () => {
@@ -95,7 +94,7 @@ o.spec('bss', function() {
       :hover {
         opacity 0.5
       }
-    `
+    `.toString()
     o(b.rules.pop()).equals(cn() + ':hover{opacity:0.5;}')
   })
 
@@ -103,16 +102,16 @@ o.spec('bss', function() {
     b`
       transform translateY(20)
                 rotate(${ 'sdfk' })
-    `
-    o(b.rules.pop()).equals(cn() + '{transform:translateY(20px);rotate:(var(--' + cn().slice(1) + '-1));}')
+    `.toString()
+    o(b.rules.pop()).equals(cn() + '{transform:translateY(20px);rotate:(sdfk);}')
   })
 
   o('Support multiline props', () => {
     b`
       transform: translateY(20)
                  rotate(${ 'sdfk' });
-    `
-    o(b.rules.pop()).equals(cn() + '{transform:translateY(20px) rotate(var(--' + cn().slice(1) + '-1));}')
+    `.toString()
+    o(b.rules.pop()).equals(cn() + '{transform:translateY(20px) rotate(sdfk);}')
   })
 
   o('White space around colon', () => {
@@ -123,21 +122,23 @@ o.spec('bss', function() {
       position:
       absolute;
       position:
-      absolute`
-    o(b.rules.pop()).equals(cn() + '{position:absolute;position:absolute;position:absolute;position:absolute;position:absolute;position:absolute;}')
+      absolute`.toString()
+    o(b.rules.pop()).equals(cn() +
+      '{position:absolute;position:absolute;position:absolute;position:absolute;position:absolute;position:absolute;}'
+    )
   })
 
   o('Multiline property values', () => {
     b`position: absolute;
       transform: translate(-50%, -50%)
-                  rotate(-45deg);`
+                  rotate(-45deg);`.toString()
     o(b.rules.pop()).equals(cn() + '{position:absolute;transform:translate(-50%, -50%) rotate(-45deg);}')
   })
 
   o('Comments in strings', () => {
     b`position: absolute; // This is absolute
       transform: translate(-50%, -50%) // This is multi line
-                  rotate(-45deg); // And here it ends`
+                  rotate(-45deg); // And here it ends`.toString()
     o(b.rules.pop()).equals(cn() + '{position:absolute;transform:translate(-50%, -50%) rotate(-45deg);}')
   })
 
@@ -148,7 +149,7 @@ o.spec('bss', function() {
         50%  { margin-top: 150px; }
         to   { margin-top: 100px; }
       }
-    `
+    `.toString()
     o(b.rules.pop()).equals('@keyframes wat{from{margin-top:50px;}50%{margin-top:150px;}to{margin-top:100px;}}')
   })
 
@@ -159,7 +160,7 @@ o.spec('bss', function() {
           padding: 1rem 3rem;
         }
       }
-    `
+    `.toString()
     o(b.rules.pop()).equals('@media screen and (min-width: 900px){' + cn() + ' article{padding:1rem 3rem;}}')
   })
 
@@ -176,7 +177,8 @@ o.spec('bss', function() {
           padding: 2rem 6rem;
         }
       }
-    `
+    `.toString()
+
     o(b.rules.pop()).equals('@media screen and (min-width: 1500px){' + cn() + ' article{padding:2rem 6rem;}}')
     o(b.rules.pop()).equals('@media screen and (min-width: 900px){' + cn() + ' article{padding:1rem 3rem;}}')
   })
@@ -188,7 +190,7 @@ o.spec('bss', function() {
           display: flex;
         }
       }
-    `
+    `.toString()
     o(b.rules.pop()).equals('@supports (display: flex){' + cn() + ' article{display:flex;}}')
   })
 
@@ -201,36 +203,35 @@ o.spec('bss', function() {
           }
         }
       }
-    `
-    o(b.rules.pop()).equals('@supports (display: flex){@media screen and (min-width: 900px){' + cn() + ' article{display:flex;}}}')
+    `.toString()
+    o(b.rules.pop()).equals(
+      '@supports (display: flex){@media screen and (min-width: 900px){' + cn() + ' article{display:flex;}}}'
+    )
   })
 
-/*
+
+  o('Auto px', () => {
+    b`
+      bc rgba(200,200,200,0.5)
+      border 10 solid rgb(255,0,0)
+      transform translate(60) rotate(40)
+    `.toString()
+    o(b.rules.pop()).equals(cn() + '{'
+      + 'background-color:rgba(200,200,200,0.5);'
+      + 'border:10px solid rgb(255,0,0);'
+      + 'transform:translate(60px) rotate(40deg);'
+      + '}'
+    )
+  })
+
   o('Inline animation', () => {
-    b`
-      animation 1s {
-        from { margin-bottom 0 },
-        50% { margin-top 50 },
-        to { margin-top 100 }
-      }
-    `
-    o(b.rules.pop()).equals('')
+    b`animation 1s ${{
+      from: 'margin-bottom 0',
+      '50%': 'margin-top 50',
+      to: 'margin-top 100'
+    }}
+    `.toString()
+    o(b.rules.pop()).equals(cn() + '{animation:1s ' + (b.prefix + (b.count - 1)) + ';}')
   })
-
-  o('Multiple inline animation', () => {
-    b`
-      animation 1s {
-        from { margin-top 50px }
-        50%  { margin-top 150px }
-        to   { margin-top 100px }
-      }, {
-        20%  { transform translateX(50px) }
-        50%  { transform translateX(150px) }
-        80%  { transform translateX(100px) }
-      }
-    `
-    o(b.rules.pop()).equals('')
-  })
-*/
 
 })
