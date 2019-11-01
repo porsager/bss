@@ -61,6 +61,11 @@ const cn = () => '.' + b.prefix + b.count
 
 o.spec('bss', function() {
 
+  o.before(() => {
+    b.rules = []
+    b.count = 0
+  })
+
   o('global', () => {
     b.global`
       html {
@@ -76,9 +81,7 @@ o.spec('bss', function() {
         c white
         ${ b`
           position relative
-          ${ b`
-            font-size 20
-          `}
+          ${ b`font-size 20` }
         `}
       `}
       bc blue
@@ -232,6 +235,33 @@ o.spec('bss', function() {
     }}
     `.toString()
     o(b.rules.pop()).equals(cn() + '{animation:1s ' + (b.prefix + (b.count - 1)) + ';}')
+  })
+
+  o('Chaining composition', () => {
+    const red = b`bc red`
+    red`
+      c white
+    `.toString()
+    o(b.rules.pop()).equals(cn() + '{background-color:red;color:white;}')
+  })
+
+  o('Inline mixin', () => {
+    const red = b`bc red`
+    b`
+      ${ red }
+      c white
+    `.toString()
+    o(b.rules.pop()).equals(cn() + '{background-color:red;color:white;}')
+  })
+
+  o('Inline mixins', () => {
+    const red = b`bc red`
+        , round = b`br 10`
+    b`
+      ${ [red, round] }
+      c white
+    `.toString()
+    o(b.rules.pop()).equals(cn() + '{background-color:red;border-radius:10px;color:white;}')
   })
 
 })
