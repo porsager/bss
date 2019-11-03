@@ -212,6 +212,14 @@ o.spec('bss', function() {
     )
   })
 
+  o('Nested comma selectors are all wrapped', () => {
+    b`
+      div,span {
+        o 0
+      }
+    `.toString()
+    o(b.rules.pop()).equals(cn() + ' div,' + cn() + ' span{opacity:0;}')
+  })
 
   o('Auto px', () => {
     b`
