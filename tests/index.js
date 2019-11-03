@@ -61,7 +61,7 @@ const cn = () => '.' + b.prefix + b.count
 
 o.spec('bss', function() {
 
-  o.before(() => {
+  o.beforeEach(() => {
     b.rules = []
     b.count = 0
   })
@@ -235,6 +235,7 @@ o.spec('bss', function() {
     }}
     `.toString()
     o(b.rules.pop()).equals(cn() + '{animation:1s ' + (b.prefix + (b.count - 1)) + ';}')
+    o(b.rules.pop()).equals('@keyframes ' + b.prefix + '1{from{margin-bottom:0px;}50%{margin-top:50px;}to{margin-top:100px;}}')
   })
 
   o('Chaining composition', () => {
