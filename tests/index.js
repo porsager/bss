@@ -277,16 +277,17 @@ t('Auto px', () => {
 })
 
 t('Inline animation', () => {
-  b`animation 1s ${{
-    from: 'margin-bottom 0',
-    '50%': 'margin-top 50',
-    to: 'margin-top 100'
-  }}
+  b`animation 1s {
+    from { margin-bottom 0 }
+    50% { margin-top 50 }
+    to { margin-top 100 }
+  }
   `.toString()
+
   return [
     b.rules.pop() + b.rules.pop(),
-    cn() + '{animation:1s ' + (b.prefix + (b.count - 1)) + ';}'
-    + '@keyframes ' + b.prefix + '1{from{margin-bottom:0px;}50%{margin-top:50px;}to{margin-top:100px;}}'
+    '@keyframes ' + b.prefix + b.count + '{from{margin-bottom:0px;}50%{margin-top:50px;}to{margin-top:100px;}}'
+    + cn() + '{animation:1s ' + b.prefix + b.count + ';}'
   ]
 })
 
