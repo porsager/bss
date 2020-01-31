@@ -138,7 +138,8 @@ t('White space around colon', () => {
 
   return [
     b.rules.pop(),
-    cn() + '{position:absolute;position:absolute;position:absolute;position:absolute;position:absolute;position:absolute;}'
+    cn() + '{position:absolute;position:absolute;position:absolute;'
+    + 'position:absolute;position:absolute;position:absolute;}'
   ]
 })
 

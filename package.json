@@ -1,12 +1,13 @@
 {
   "name": "bss",
-  "version": "3.0.0-beta5",
+  "version": "3.0.0-rc.0",
   "description": "Better Style Sheets",
   "main": "dist/bss.js",
   "module": "dist/bss.esm.js",
   "scripts": {
     "test": "TEST=true npm run build && node tests/index.js",
-    "prepublishOnly": "npm run build",
+    "lint": "eslint lib && eslint tests",
+    "prepublishOnly": "npm run lint && npm run build",
     "build": "rollup -c"
   },
   "author": "Rasmus Porsager <rasmus@porsager.com>",

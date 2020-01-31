@@ -1,16 +1,12 @@
 module.exports = {
   root: true,
-  env: {
-    node: true,
-    browser: true,
-    es6: true
+  "env": {
+    "node": true,
+    "es6": true
   },
-  parserOptions: {
-    ecmaVersion: 6,
-    sourceType: 'module',
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true
-    }
+  "parserOptions": {
+    "ecmaVersion": 9,
+    "sourceType": "module"
   },
   rules: {
     /* Possible errors */
