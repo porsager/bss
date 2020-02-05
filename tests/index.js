@@ -98,7 +98,7 @@ t('Pseudo works', () => {
 
   return [
     b.rules.pop(),
-    cn() + ':hover{opacity:0.5;}'
+    cn() + cn() + ':hover{opacity:0.5;}'
   ]
 })
 
@@ -110,7 +110,7 @@ t('Fails gracefully on bad prop syntax', () => {
 
   return [
     b.rules.pop(),
-    cn() + '{transform:translateY(20px);rotate:(sdfk);}'
+    cn() + cn() + '{transform:translateY(20px);rotate:(sdfk);}'
   ]
 })
 
@@ -122,7 +122,7 @@ t('Support multiline props', () => {
 
   return [
     b.rules.pop(),
-    cn() + '{transform:translateY(20px) rotate(sdfk);}'
+    cn() + cn() + '{transform:translateY(20px) rotate(sdfk);}'
   ]
 })
 
@@ -138,7 +138,7 @@ t('White space around colon', () => {
 
   return [
     b.rules.pop(),
-    cn() + '{position:absolute;position:absolute;position:absolute;'
+    cn() + cn() + '{position:absolute;position:absolute;position:absolute;'
     + 'position:absolute;position:absolute;position:absolute;}'
   ]
 })
@@ -149,7 +149,7 @@ t('Multiline property values', () => {
                 rotate(-45deg);`.toString()
   return [
     b.rules.pop(),
-    cn() + '{position:absolute;transform:translate(-50%, -50%) rotate(-45deg);}'
+    cn() + cn() + '{position:absolute;transform:translate(-50%, -50%) rotate(-45deg);}'
   ]
 })
 
@@ -160,7 +160,7 @@ t('Comments in strings', () => {
 
   return [
     b.rules.pop(),
-    cn() + '{position:absolute;transform:translate(-50%, -50%) rotate(-45deg);}'
+    cn() + cn() + '{position:absolute;transform:translate(-50%, -50%) rotate(-45deg);}'
   ]
 })
 
@@ -180,6 +180,19 @@ t('@keyframes', () => {
 })
 
 t('@media', () => {
+  b`
+    @media screen and (min-width: 900px) {
+      padding: 1rem 3rem;
+    }
+  `.toString()
+
+  return [
+    b.rules.pop(),
+    '@media screen and (min-width: 900px){' + cn() + cn() + '{padding:1rem 3rem;}}'
+  ]
+})
+
+t('@media nest', () => {
   b`
     @media screen and (min-width: 900px) {
       article {
@@ -269,7 +282,7 @@ t('Auto px', () => {
   `.toString()
   return [
     b.rules.pop(),
-    cn() + '{'
+    cn() + cn() + '{'
     + 'background-color:rgba(200,200,200,0.5);'
     + 'border:10px solid rgb(255,0,0);'
     + 'transform:translate(60px) rotate(40deg);'
@@ -288,7 +301,7 @@ t('Inline animation', () => {
   return [
     b.rules.pop() + b.rules.pop(),
     '@keyframes ' + b.prefix + b.count + '{from{margin-bottom:0px;}50%{margin-top:50px;}to{margin-top:100px;}}'
-    + cn() + '{animation:1s ' + b.prefix + b.count + ';}'
+    + cn() + cn() + '{animation:1s ' + b.prefix + b.count + ';}'
   ]
 })
 
@@ -300,7 +313,7 @@ t('Chaining composition', () => {
 
   return [
     b.rules.pop(),
-    cn() + '{background-color:red;color:white;}'
+    cn() + cn() + '{background-color:red;color:white;}'
   ]
 })
 
@@ -313,7 +326,7 @@ t('Inline mixin', () => {
 
   return [
     b.rules.pop(),
-    cn() + '{background-color:red;color:white;}'
+    cn() + cn() + '{background-color:red;color:white;}'
   ]
 })
 
@@ -326,6 +339,6 @@ t('Inline mixins', () => {
   `.toString()
   return [
     b.rules.pop(),
-    cn() + '{background-color:red;border-radius:10px;color:white;}'
+    cn() + cn() + '{background-color:red;border-radius:10px;color:white;}'
   ]
 })
