@@ -5,7 +5,7 @@
   "main": "dist/bss.js",
   "module": "dist/bss.esm.js",
   "scripts": {
-    "test": "TEST=true npm run build && node tests/index.js",
+    "test": "TEST=true npm run build && plog tests/index.js",
     "lint": "eslint lib && eslint tests",
     "prepublishOnly": "npm run lint && npm run build",
     "build": "rollup -c"

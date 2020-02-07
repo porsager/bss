@@ -102,6 +102,19 @@ t('Pseudo works', () => {
   ]
 })
 
+t('css variabless', () => {
+  b`
+    --lowercase 1
+    --camelCase 1
+    --UPPERCASE 1
+  `.toString()
+
+  return [
+    b.rules.pop(),
+    cn() + cn() + '{--lowercase:1;--camelCase:1;--UPPERCASE:1;}'
+  ]
+})
+
 t('Fails gracefully on bad prop syntax', () => {
   b`
     transform translateY(20)
