@@ -356,7 +356,7 @@ t('Inline mixins', () => {
   ]
 })
 
-ot('Custom class name prefix', () => {
+t('Custom class name prefix', () => {
   const className = b`.wat
     bc blue
   `.toString()
