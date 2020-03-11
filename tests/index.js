@@ -356,6 +356,17 @@ t('Inline mixins', () => {
   ]
 })
 
+ot('Custom class name prefix', () => {
+  const className = b`.wat
+    bc blue
+  `.toString()
+
+  return [
+    className + b.rules.pop(),
+    'wat-' + cn().slice(1) + '.wat-' + cn().slice(1) + '.wat-' + cn().slice(1) + '{background-color:blue;}'
+  ]
+})
+
 t('font-face', () => {
   b.global`
     @font-face {
