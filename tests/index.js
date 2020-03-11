@@ -355,3 +355,16 @@ t('Inline mixins', () => {
     cn() + cn() + '{background-color:red;border-radius:10px;color:white;}'
   ]
 })
+
+t('font-face', () => {
+  b.global`
+    @font-face {
+      font-family Avenir
+      src url(test.font)
+    }
+  `
+  return [
+    '@font-face{font-family:Avenir;src:url(test.font);}',
+    b.rules.pop()
+  ]
+})
