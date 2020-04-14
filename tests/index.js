@@ -166,7 +166,8 @@ t('Multiline property values', () => {
   ]
 })
 
-t('Comments in strings', () => {
+/*
+t('Inline comments', () => {
   b`position: absolute; // This is absolute
     transform: translate(-50%, -50%) // This is multi line
                 rotate(-45deg); // And here it ends`.toString()
@@ -176,6 +177,7 @@ t('Comments in strings', () => {
     cn() + cn() + '{position:absolute;transform:translate(-50%, -50%) rotate(-45deg);}'
   ]
 })
+*/
 
 t('@keyframes', () => {
   b`
