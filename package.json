@@ -10,6 +10,10 @@
     "prepublishOnly": "npm run lint && npm run build",
     "build": "rollup -c"
   },
+  "files": [
+    "lib",
+    "dist"
+  ],
   "author": "Rasmus Porsager <rasmus@porsager.com>",
   "repository": "porsager/bss",
   "license": "WTFPL",
