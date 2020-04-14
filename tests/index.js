@@ -35,6 +35,7 @@ global.document = {
       animation: '',
       opacity: '',
       display: '',
+      d: '',
       backgroundColor: '',
       content: '',
       width: '0',
@@ -102,7 +103,7 @@ t('Pseudo works', () => {
   ]
 })
 
-t('css variabless', () => {
+t('css variables', () => {
   b`
     --lowercase 1
     --camelCase 1
@@ -112,6 +113,17 @@ t('css variabless', () => {
   return [
     b.rules.pop(),
     cn() + cn() + '{--lowercase:1;--camelCase:1;--UPPERCASE:1;}'
+  ]
+})
+
+t('Only use shorthands when lean', () => {
+  b`
+    d:wat;
+  `.toString()
+
+  return [
+    cn() + cn() + '{d:wat;}',
+    b.rules.pop()
   ]
 })
 
@@ -129,13 +141,14 @@ t('Fails gracefully on bad prop syntax', () => {
 
 t('Support multiline props', () => {
   b`
-    transform: translateY(20)
+    transform: translateY(20px)
                rotate(${ 'sdfk' });
   `.toString()
 
   return [
     b.rules.pop(),
-    cn() + cn() + '{transform:translateY(20px) rotate(sdfk);}'
+    cn() + cn() + `{transform:translateY(20px)
+               rotate(sdfk);}`
   ]
 })
 
@@ -162,7 +175,8 @@ t('Multiline property values', () => {
                 rotate(-45deg);`.toString()
   return [
     b.rules.pop(),
-    cn() + cn() + '{position:absolute;transform:translate(-50%, -50%) rotate(-45deg);}'
+    cn() + cn() + `{position:absolute;transform:translate(-50%, -50%)
+                rotate(-45deg);}`
   ]
 })
 
