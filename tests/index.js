@@ -123,7 +123,7 @@ t('Fails gracefully on bad prop syntax', () => {
 
   return [
     b.rules.pop(),
-    cn() + cn() + '{transform:translateY(20px);rotate:(sdfk);}'
+    cn() + cn() + '{transform:translateY(20px);rotate:sdfk);}'
   ]
 })
 
@@ -378,6 +378,17 @@ t('font-face', () => {
   `
   return [
     '@font-face{font-family:Avenir;src:url(test.font);}',
+    b.rules.pop()
+  ]
+})
+
+t('quotes', () => {
+  b`
+    background-image: url("http://wat.com");
+  `.toString()
+
+  return [
+    cn() + cn() + '{background-image:url("http://wat.com");}',
     b.rules.pop()
   ]
 })
