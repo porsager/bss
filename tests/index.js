@@ -139,6 +139,31 @@ t('Fails gracefully on bad prop syntax', () => {
   ]
 })
 
+t('Mixed strict and lean works', () => {
+  b`
+    bc blue
+    bc:blue;
+  `.toString()
+
+  return [
+    cn() + cn() + '{background-color:blue;bc:blue;}',
+    b.rules.pop()
+  ]
+})
+
+t('Mixed nesting and lean works', () => {
+  b`
+    input:checked + label::after {
+      w 18
+    }
+  `.toString()
+
+  return [
+    b.rules.pop(),
+    cn() + ' input:checked + label::after{width:18px;}'
+  ]
+})
+
 t('Support multiline props', () => {
   b`
     transform: translateY(20px)
