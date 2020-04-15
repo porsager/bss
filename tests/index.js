@@ -180,6 +180,15 @@ t('Multiline property values', () => {
   ]
 })
 
+t('0 value is added correct', () => {
+  b`w ${ 0 }%`.toString()
+
+  return [
+    cn() + cn() + '{width:0%;}',
+    b.rules.pop()
+  ]
+})
+
 /*
 t('Inline comments', () => {
   b`position: absolute; // This is absolute
