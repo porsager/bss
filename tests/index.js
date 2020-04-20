@@ -362,7 +362,7 @@ t('Inline animation', () => {
   `.toString()
 
   return [
-    b.rules.pop() + b.rules.pop(),
+    b.rules.join(''),
     '@keyframes ' + b.prefix + b.count + '{from{margin-bottom:0px;}50%{margin-top:50px;}to{margin-top:100px;}}'
     + cn() + cn() + '{animation:1s ' + b.prefix + b.count + ';}'
   ]
@@ -441,7 +441,8 @@ t('quotes', () => {
   ]
 })
 
-ot('Animation is reused', () => {
+t('Animation is reused', () => {
+  b.rules = []
   b`
     bc blue
     animation 1s {
