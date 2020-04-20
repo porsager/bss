@@ -440,3 +440,24 @@ t('quotes', () => {
     b.rules.pop()
   ]
 })
+
+ot('Animation is reused', () => {
+  b`
+    bc blue
+    animation 1s {
+      from { o 0}
+    }
+  `.toString()
+
+  b`
+    bc white
+    animation 1s {
+      from { o 0 }
+    }
+  `.toString()
+
+  return [
+    b.rules[1].slice(-12),
+    b.rules[2].slice(-12)
+  ]
+})
