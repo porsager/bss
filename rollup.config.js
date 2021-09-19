@@ -1,5 +1,4 @@
-import buble from 'rollup-plugin-buble'
-import { uglify } from 'rollup-plugin-uglify'
+import esbuild from 'rollup-plugin-esbuild'
 import filesize from 'rollup-plugin-filesize'
 
 export default [
@@ -15,7 +14,7 @@ export default [
     plugins: process.env.TEST
       ? []
       : [
-        buble(),
+        esbuild(),
         filesize()
       ]
   }, {
@@ -28,8 +27,7 @@ export default [
       sourcemap: true
     },
     plugins: [
-      buble(),
-      uglify({ mangle: true, compress: true }),
+      esbuild({ minify: true }),
       filesize()
     ]
   }, {
@@ -40,7 +38,7 @@ export default [
       sourcemap: true
     },
     plugins: [
-      buble(),
+      esbuild(),
       filesize()
     ]
   }

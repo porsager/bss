@@ -13,10 +13,9 @@
   "repository": "porsager/bss",
   "license": "WTFPL",
   "devDependencies": {
-    "ospec": "4.0.1",
-    "rollup": "1.31.0",
-    "rollup-plugin-buble": "0.19.8",
-    "rollup-plugin-filesize": "6.2.1",
-    "rollup-plugin-uglify": "6.0.4"
+    "ospec": "4.1.1",
+    "rollup": "2.56.3",
+    "rollup-plugin-esbuild": "4.5.0",
+    "rollup-plugin-filesize": "9.1.1"
   }
 }
